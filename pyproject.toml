@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "oa4a"
+version = "0.1.0"
+description = "Extensible OpenAI API bridge supporting multiple LLM providers"
+authors = ["David Gootman <gootman@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
