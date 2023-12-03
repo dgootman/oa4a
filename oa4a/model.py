@@ -9,7 +9,6 @@ Auto-generated from https://github.com/openai/openai-openapi
 
 from __future__ import annotations
 
-from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import (
@@ -24,6 +23,7 @@ from pydantic import (
     conint,
     constr,
 )
+from typing_extensions import Literal
 
 
 class Error(BaseModel):
@@ -43,10 +43,6 @@ class ErrorResponse(BaseModel):
     error: Error
 
 
-class Object(Enum):
-    list = "list"
-
-
 class DeleteModelResponse(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -54,24 +50,6 @@ class DeleteModelResponse(BaseModel):
     id: str
     deleted: bool
     object: str
-
-
-class Model1(Enum):
-    """
-    ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.
-
-    """
-
-    babbage_002 = "babbage-002"
-    davinci_002 = "davinci-002"
-    gpt_3_5_turbo_instruct = "gpt-3.5-turbo-instruct"
-    text_davinci_003 = "text-davinci-003"
-    text_davinci_002 = "text-davinci-002"
-    text_davinci_001 = "text-davinci-001"
-    code_davinci_002 = "code-davinci-002"
-    text_curie_001 = "text-curie-001"
-    text_babbage_001 = "text-babbage-001"
-    text_ada_001 = "text-ada-001"
 
 
 class PromptItem(RootModel[List[Any]]):
@@ -82,7 +60,21 @@ class CreateCompletionRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    model: Union[str, Model1] = Field(
+    model: Union[
+        str,
+        Literal[
+            "babbage-002",
+            "davinci-002",
+            "gpt-3.5-turbo-instruct",
+            "text-davinci-003",
+            "text-davinci-002",
+            "text-davinci-001",
+            "code-davinci-002",
+            "text-curie-001",
+            "text-babbage-001",
+            "text-ada-001",
+        ],
+    ] = Field(
         ...,
         description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
     )
@@ -157,19 +149,6 @@ class CreateCompletionRequest(BaseModel):
     )
 
 
-class FinishReason(Enum):
-    """
-    The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
-    `length` if the maximum number of tokens specified in the request was reached,
-    or `content_filter` if content was omitted due to a flag from our content filters.
-
-    """
-
-    stop = "stop"
-    length = "length"
-    content_filter = "content_filter"
-
-
 class Logprobs(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -184,39 +163,13 @@ class Choice(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    finish_reason: FinishReason = Field(
+    finish_reason: Literal["stop", "length", "content_filter"] = Field(
         ...,
         description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n",
     )
     index: int
     logprobs: Logprobs
     text: str
-
-
-class Object1(Enum):
-    """
-    The object type, which is always "text_completion"
-    """
-
-    text_completion = "text_completion"
-
-
-class Type(Enum):
-    """
-    The type of the content part.
-    """
-
-    image_url = "image_url"
-
-
-class Detail(Enum):
-    """
-    Specifies the detail level of the image. Learn more in the [Vision guide](/docs/guides/vision/low-or-high-fidelity-image-understanding).
-    """
-
-    auto = "auto"
-    low = "low"
-    high = "high"
 
 
 class ImageUrl(BaseModel):
@@ -226,7 +179,7 @@ class ImageUrl(BaseModel):
     url: AnyUrl = Field(
         ..., description="Either a URL of the image or the base64 encoded image data."
     )
-    detail: Optional[Detail] = Field(
+    detail: Optional[Literal["auto", "low", "high"]] = Field(
         "auto",
         description="Specifies the detail level of the image. Learn more in the [Vision guide](/docs/guides/vision/low-or-high-fidelity-image-understanding).",
     )
@@ -236,32 +189,16 @@ class ChatCompletionRequestMessageContentPartImage(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type = Field(..., description="The type of the content part.")
+    type: Literal["image_url"] = Field(..., description="The type of the content part.")
     image_url: ImageUrl
-
-
-class Type1(Enum):
-    """
-    The type of the content part.
-    """
-
-    text = "text"
 
 
 class ChatCompletionRequestMessageContentPartText(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type1 = Field(..., description="The type of the content part.")
+    type: Literal["text"] = Field(..., description="The type of the content part.")
     text: str = Field(..., description="The text content.")
-
-
-class Role(Enum):
-    """
-    The role of the messages author, in this case `system`.
-    """
-
-    system = "system"
 
 
 class ChatCompletionRequestSystemMessage(BaseModel):
@@ -269,29 +206,13 @@ class ChatCompletionRequestSystemMessage(BaseModel):
         extra="allow",
     )
     content: SecretStr = Field(..., description="The contents of the system message.")
-    role: Role = Field(
+    role: Literal["system"] = Field(
         ..., description="The role of the messages author, in this case `system`."
     )
     name: Optional[str] = Field(
         None,
         description="An optional name for the participant. Provides the model information to differentiate between participants of the same role.",
     )
-
-
-class Role1(Enum):
-    """
-    The role of the messages author, in this case `user`.
-    """
-
-    user = "user"
-
-
-class Role2(Enum):
-    """
-    The role of the messages author, in this case `assistant`.
-    """
-
-    assistant = "assistant"
 
 
 class FunctionCall(BaseModel):
@@ -309,19 +230,11 @@ class FunctionCall(BaseModel):
     name: str = Field(..., description="The name of the function to call.")
 
 
-class Role3(Enum):
-    """
-    The role of the messages author, in this case `tool`.
-    """
-
-    tool = "tool"
-
-
 class ChatCompletionRequestToolMessage(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    role: Role3 = Field(
+    role: Literal["tool"] = Field(
         ..., description="The role of the messages author, in this case `tool`."
     )
     content: SecretStr = Field(..., description="The contents of the tool message.")
@@ -330,19 +243,11 @@ class ChatCompletionRequestToolMessage(BaseModel):
     )
 
 
-class Role4(Enum):
-    """
-    The role of the messages author, in this case `function`.
-    """
-
-    function = "function"
-
-
 class ChatCompletionRequestFunctionMessage(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    role: Role4 = Field(
+    role: Literal["function"] = Field(
         ..., description="The role of the messages author, in this case `function`."
     )
     arguments: str = Field(
@@ -391,14 +296,6 @@ class ChatCompletionFunctionCallOption(BaseModel):
     name: str = Field(..., description="The name of the function to call.")
 
 
-class Type2(Enum):
-    """
-    The type of the tool. Currently, only `function` is supported.
-    """
-
-    function = "function"
-
-
 class FunctionObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -412,16 +309,6 @@ class FunctionObject(BaseModel):
         description="The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.",
     )
     parameters: FunctionParameters
-
-
-class ChatCompletionToolChoiceOption1(Enum):
-    """
-    `none` means the model will not call a function and instead generates a message. `auto` means the model can pick between generating a message or calling a function.
-
-    """
-
-    none = "none"
-    auto = "auto"
 
 
 class Function(BaseModel):
@@ -439,7 +326,7 @@ class ChatCompletionNamedToolChoice(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Optional[Type2] = Field(
+    type: Optional[Literal["function"]] = Field(
         None,
         description="The type of the tool. Currently, only `function` is supported.",
     )
@@ -466,7 +353,7 @@ class ChatCompletionMessageToolCall(BaseModel):
         extra="allow",
     )
     id: str = Field(..., description="The ID of the tool call.")
-    type: Type2 = Field(
+    type: Literal["function"] = Field(
         ...,
         description="The type of the tool. Currently, only `function` is supported.",
     )
@@ -490,31 +377,19 @@ class ChatCompletionMessageToolCallChunk(BaseModel):
     )
     index: int
     id: Optional[str] = Field(None, description="The ID of the tool call.")
-    type: Optional[Type2] = Field(
+    type: Optional[Literal["function"]] = Field(
         None,
         description="The type of the tool. Currently, only `function` is supported.",
     )
     function: Optional[Function2] = None
 
 
-class ChatCompletionRole(Enum):
-    """
-    The role of the author of a message
-    """
-
-    system = "system"
-    user = "user"
-    assistant = "assistant"
-    tool = "tool"
-    function = "function"
-
-
-class Role5(Enum):
-    """
-    The role of the author of this message.
-    """
-
-    assistant = "assistant"
+class ChatCompletionRole(
+    RootModel[Literal["system", "user", "assistant", "tool", "function"]]
+):
+    root: Literal["system", "user", "assistant", "tool", "function"] = Field(
+        ..., description="The role of the author of a message"
+    )
 
 
 class FunctionCall2(BaseModel):
@@ -530,17 +405,6 @@ class FunctionCall2(BaseModel):
         description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
     name: Optional[str] = Field(None, description="The name of the function to call.")
-
-
-class Role6(Enum):
-    """
-    The role of the author of this message.
-    """
-
-    system = "system"
-    user = "user"
-    assistant = "assistant"
-    tool = "tool"
 
 
 class ChatCompletionStreamResponseDelta(BaseModel):
@@ -559,39 +423,9 @@ class ChatCompletionStreamResponseDelta(BaseModel):
         description="Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.",
     )
     tool_calls: Optional[List[ChatCompletionMessageToolCallChunk]] = None
-    role: Optional[Role6] = Field(
+    role: Optional[Literal["system", "user", "assistant", "tool"]] = Field(
         None, description="The role of the author of this message."
     )
-
-
-class Model2(Enum):
-    """
-    ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility) table for details on which models work with the Chat API.
-    """
-
-    gpt_4_1106_preview = "gpt-4-1106-preview"
-    gpt_4_vision_preview = "gpt-4-vision-preview"
-    gpt_4 = "gpt-4"
-    gpt_4_0314 = "gpt-4-0314"
-    gpt_4_0613 = "gpt-4-0613"
-    gpt_4_32k = "gpt-4-32k"
-    gpt_4_32k_0314 = "gpt-4-32k-0314"
-    gpt_4_32k_0613 = "gpt-4-32k-0613"
-    gpt_3_5_turbo = "gpt-3.5-turbo"
-    gpt_3_5_turbo_16k = "gpt-3.5-turbo-16k"
-    gpt_3_5_turbo_0301 = "gpt-3.5-turbo-0301"
-    gpt_3_5_turbo_0613 = "gpt-3.5-turbo-0613"
-    gpt_3_5_turbo_1106 = "gpt-3.5-turbo-1106"
-    gpt_3_5_turbo_16k_0613 = "gpt-3.5-turbo-16k-0613"
-
-
-class Type6(Enum):
-    """
-    Must be one of `text` or `json_object`.
-    """
-
-    text = "text"
-    json_object = "json_object"
 
 
 class ResponseFormat(BaseModel):
@@ -607,77 +441,11 @@ class ResponseFormat(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Optional[Type6] = Field(
+    type: Optional[Literal["text", "json_object"]] = Field(
         "text",
         description="Must be one of `text` or `json_object`.",
         examples=["json_object"],
     )
-
-
-class FunctionCall3(Enum):
-    """
-    `none` means the model will not call a function and instead generates a message. `auto` means the model can pick between generating a message or calling a function.
-
-    """
-
-    none = "none"
-    auto = "auto"
-
-
-class FinishReason1(Enum):
-    """
-    The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
-    `length` if the maximum number of tokens specified in the request was reached,
-    `content_filter` if content was omitted due to a flag from our content filters,
-    `tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.
-
-    """
-
-    stop = "stop"
-    length = "length"
-    tool_calls = "tool_calls"
-    content_filter = "content_filter"
-    function_call = "function_call"
-
-
-class Object2(Enum):
-    """
-    The object type, which is always `chat.completion`.
-    """
-
-    chat_completion = "chat.completion"
-
-
-class FinishReason2(Enum):
-    """
-    The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, or `function_call` if the model called a function.
-
-    """
-
-    stop = "stop"
-    length = "length"
-    function_call = "function_call"
-    content_filter = "content_filter"
-
-
-class Object4(Enum):
-    list = "list"
-
-
-class FinishReason3(Enum):
-    """
-    The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
-    `length` if the maximum number of tokens specified in the request was reached,
-    `content_filter` if content was omitted due to a flag from our content filters,
-    `tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.
-
-    """
-
-    stop = "stop"
-    length = "length"
-    tool_calls = "tool_calls"
-    content_filter = "content_filter"
-    function_call = "function_call"
 
 
 class Choice3(BaseModel):
@@ -685,21 +453,15 @@ class Choice3(BaseModel):
         extra="allow",
     )
     delta: ChatCompletionStreamResponseDelta
-    finish_reason: FinishReason3 = Field(
+    finish_reason: Literal[
+        "stop", "length", "tool_calls", "content_filter", "function_call"
+    ] = Field(
         ...,
         description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n",
     )
     index: int = Field(
         ..., description="The index of the choice in the list of choices."
     )
-
-
-class Object5(Enum):
-    """
-    The object type, which is always `chat.completion.chunk`.
-    """
-
-    chat_completion_chunk = "chat.completion.chunk"
 
 
 class CreateChatCompletionStreamResponse(BaseModel):
@@ -727,7 +489,7 @@ class CreateChatCompletionStreamResponse(BaseModel):
         None,
         description="This fingerprint represents the backend configuration that the model runs with.\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
-    object: Object5 = Field(
+    object: Literal["chat.completion.chunk"] = Field(
         ..., description="The object type, which is always `chat.completion.chunk`."
     )
 
@@ -742,15 +504,6 @@ class CreateChatCompletionImageResponse(BaseModel):
     )
 
 
-class Model3(Enum):
-    """
-    ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.
-    """
-
-    text_davinci_edit_001 = "text-davinci-edit-001"
-    code_davinci_edit_001 = "code-davinci-edit-001"
-
-
 class CreateEditRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -760,7 +513,9 @@ class CreateEditRequest(BaseModel):
         description="The instruction that tells the model how to edit the prompt.",
         examples=["Fix the spelling mistakes."],
     )
-    model: Union[str, Model3] = Field(
+    model: Union[
+        str, Literal["text-davinci-edit-001", "code-davinci-edit-001"]
+    ] = Field(
         ...,
         description="ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.",
         examples=["text-davinci-edit-001"],
@@ -787,23 +542,11 @@ class CreateEditRequest(BaseModel):
     )
 
 
-class FinishReason4(Enum):
-    """
-    The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
-    `length` if the maximum number of tokens specified in the request was reached,
-    or `content_filter` if content was omitted due to a flag from our content filters.
-
-    """
-
-    stop = "stop"
-    length = "length"
-
-
 class Choice4(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    finish_reason: FinishReason4 = Field(
+    finish_reason: Literal["stop", "length"] = Field(
         ...,
         description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n",
     )
@@ -811,62 +554,6 @@ class Choice4(BaseModel):
         ..., description="The index of the choice in the list of choices."
     )
     text: str = Field(..., description="The edited result.")
-
-
-class Object6(Enum):
-    """
-    The object type, which is always `edit`.
-    """
-
-    edit = "edit"
-
-
-class Model4(Enum):
-    """
-    The model to use for image generation.
-    """
-
-    dall_e_2 = "dall-e-2"
-    dall_e_3 = "dall-e-3"
-
-
-class Quality(Enum):
-    """
-    The quality of the image that will be generated. `hd` creates images with finer details and greater consistency across the image. This param is only supported for `dall-e-3`.
-    """
-
-    standard = "standard"
-    hd = "hd"
-
-
-class ResponseFormat1(Enum):
-    """
-    The format in which the generated images are returned. Must be one of `url` or `b64_json`.
-    """
-
-    url = "url"
-    b64_json = "b64_json"
-
-
-class Size(Enum):
-    """
-    The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`. Must be one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3` models.
-    """
-
-    field_256x256 = "256x256"
-    field_512x512 = "512x512"
-    field_1024x1024 = "1024x1024"
-    field_1792x1024 = "1792x1024"
-    field_1024x1792 = "1024x1792"
-
-
-class Style(Enum):
-    """
-    The style of the generated images. Must be one of `vivid` or `natural`. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images. This param is only supported for `dall-e-3`.
-    """
-
-    vivid = "vivid"
-    natural = "natural"
 
 
 class CreateImageRequest(BaseModel):
@@ -878,7 +565,7 @@ class CreateImageRequest(BaseModel):
         description="A text description of the desired image(s). The maximum length is 1000 characters for `dall-e-2` and 4000 characters for `dall-e-3`.",
         examples=["A cute baby sea otter"],
     )
-    model: Optional[Union[str, Model4]] = Field(
+    model: Optional[Union[str, Literal["dall-e-2", "dall-e-3"]]] = Field(
         "dall-e-2",
         description="The model to use for image generation.",
         examples=["dall-e-3"],
@@ -888,22 +575,24 @@ class CreateImageRequest(BaseModel):
         description="The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.",
         examples=[1],
     )
-    quality: Optional[Quality] = Field(
+    quality: Optional[Literal["standard", "hd"]] = Field(
         "standard",
         description="The quality of the image that will be generated. `hd` creates images with finer details and greater consistency across the image. This param is only supported for `dall-e-3`.",
         examples=["standard"],
     )
-    response_format: Optional[ResponseFormat1] = Field(
+    response_format: Optional[Literal["url", "b64_json"]] = Field(
         "url",
         description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
         examples=["url"],
     )
-    size: Optional[Size] = Field(
+    size: Optional[
+        Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"]
+    ] = Field(
         "1024x1024",
         description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`. Must be one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3` models.",
         examples=["1024x1024"],
     )
-    style: Optional[Style] = Field(
+    style: Optional[Literal["vivid", "natural"]] = Field(
         "vivid",
         description="The style of the generated images. Must be one of `vivid` or `natural`. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images. This param is only supported for `dall-e-3`.",
         examples=["vivid"],
@@ -937,24 +626,6 @@ class Image(BaseModel):
     )
 
 
-class Model5(Enum):
-    """
-    The model to use for image generation. Only `dall-e-2` is supported at this time.
-    """
-
-    dall_e_2 = "dall-e-2"
-
-
-class Size1(Enum):
-    """
-    The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
-    """
-
-    field_256x256 = "256x256"
-    field_512x512 = "512x512"
-    field_1024x1024 = "1024x1024"
-
-
 class CreateImageEditRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -972,7 +643,7 @@ class CreateImageEditRequest(BaseModel):
         None,
         description="An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where `image` should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as `image`.",
     )
-    model: Optional[Union[str, Model5]] = Field(
+    model: Optional[Union[str, Literal["dall-e-2"]]] = Field(
         "dall-e-2",
         description="The model to use for image generation. Only `dall-e-2` is supported at this time.",
         examples=["dall-e-2"],
@@ -982,12 +653,12 @@ class CreateImageEditRequest(BaseModel):
         description="The number of images to generate. Must be between 1 and 10.",
         examples=[1],
     )
-    size: Optional[Size1] = Field(
+    size: Optional[Literal["256x256", "512x512", "1024x1024"]] = Field(
         "1024x1024",
         description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.",
         examples=["1024x1024"],
     )
-    response_format: Optional[ResponseFormat1] = Field(
+    response_format: Optional[Literal["url", "b64_json"]] = Field(
         "url",
         description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
         examples=["url"],
@@ -1007,7 +678,7 @@ class CreateImageVariationRequest(BaseModel):
         ...,
         description="The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.",
     )
-    model: Optional[Union[str, Model5]] = Field(
+    model: Optional[Union[str, Literal["dall-e-2"]]] = Field(
         "dall-e-2",
         description="The model to use for image generation. Only `dall-e-2` is supported at this time.",
         examples=["dall-e-2"],
@@ -1017,12 +688,12 @@ class CreateImageVariationRequest(BaseModel):
         description="The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.",
         examples=[1],
     )
-    response_format: Optional[ResponseFormat1] = Field(
+    response_format: Optional[Literal["url", "b64_json"]] = Field(
         "url",
         description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
         examples=["url"],
     )
-    size: Optional[Size1] = Field(
+    size: Optional[Literal["256x256", "512x512", "1024x1024"]] = Field(
         "1024x1024",
         description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.",
         examples=["1024x1024"],
@@ -1034,24 +705,14 @@ class CreateImageVariationRequest(BaseModel):
     )
 
 
-class Model7(Enum):
-    """
-    Two content moderations models are available: `text-moderation-stable` and `text-moderation-latest`.
-
-    The default is `text-moderation-latest` which will be automatically upgraded over time. This ensures you are always using our most accurate model. If you use `text-moderation-stable`, we will provide advanced notice before updating the model. Accuracy of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.
-
-    """
-
-    text_moderation_latest = "text-moderation-latest"
-    text_moderation_stable = "text-moderation-stable"
-
-
 class CreateModerationRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
     input: Union[str, List[str]] = Field(..., description="The input text to classify")
-    model: Optional[Union[str, Model7]] = Field(
+    model: Optional[
+        Union[str, Literal["text-moderation-latest", "text-moderation-stable"]]
+    ] = Field(
         "text-moderation-latest",
         description="Two content moderations models are available: `text-moderation-stable` and `text-moderation-latest`.\n\nThe default is `text-moderation-latest` which will be automatically upgraded over time. This ensures you are always using our most accurate model. If you use `text-moderation-stable`, we will provide advanced notice before updating the model. Accuracy of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.\n",
         examples=["text-moderation-stable"],
@@ -1202,22 +863,6 @@ class CreateModerationResponse(BaseModel):
     results: List[Result] = Field(..., description="A list of moderation objects.")
 
 
-class Object7(Enum):
-    list = "list"
-
-
-class Purpose(Enum):
-    """
-    The intended purpose of the uploaded file.
-
-    Use "fine-tune" for [Fine-tuning](/docs/api-reference/fine-tuning) and "assistants" for [Assistants](/docs/api-reference/assistants) and [Messages](/docs/api-reference/messages). This allows us to validate the format of the uploaded file is correct for fine-tuning.
-
-    """
-
-    fine_tune = "fine-tune"
-    assistants = "assistants"
-
-
 class CreateFileRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1225,14 +870,10 @@ class CreateFileRequest(BaseModel):
     file: bytes = Field(
         ..., description="The File object (not file name) to be uploaded.\n"
     )
-    purpose: Purpose = Field(
+    purpose: Literal["fine-tune", "assistants"] = Field(
         ...,
         description='The intended purpose of the uploaded file.\n\nUse "fine-tune" for [Fine-tuning](/docs/api-reference/fine-tuning) and "assistants" for [Assistants](/docs/api-reference/assistants) and [Messages](/docs/api-reference/messages). This allows us to validate the format of the uploaded file is correct for fine-tuning.\n',
     )
-
-
-class Object8(Enum):
-    file = "file"
 
 
 class DeleteFileResponse(BaseModel):
@@ -1240,50 +881,8 @@ class DeleteFileResponse(BaseModel):
         extra="allow",
     )
     id: str
-    object: Object8
+    object: Literal["file"]
     deleted: bool
-
-
-class Model8(Enum):
-    """
-    The name of the model to fine-tune. You can select one of the
-    [supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
-
-    """
-
-    babbage_002 = "babbage-002"
-    davinci_002 = "davinci-002"
-    gpt_3_5_turbo = "gpt-3.5-turbo"
-
-
-class BatchSize(Enum):
-    """
-    Number of examples in each batch. A larger batch size means that model parameters
-    are updated less frequently, but with lower variance.
-
-    """
-
-    auto = "auto"
-
-
-class LearningRateMultiplier(Enum):
-    """
-    Scaling factor for the learning rate. A smaller learning rate may be useful to avoid
-    overfitting.
-
-    """
-
-    auto = "auto"
-
-
-class NEpochs(Enum):
-    """
-    The number of epochs to train the model for. An epoch refers to one full cycle
-    through the training dataset.
-
-    """
-
-    auto = "auto"
 
 
 class Hyperparameters(BaseModel):
@@ -1294,17 +893,15 @@ class Hyperparameters(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    batch_size: Optional[Union[BatchSize, conint(ge=1, le=256)]] = Field(
+    batch_size: Optional[Union[Literal["auto"], conint(ge=1, le=256)]] = Field(
         "auto",
         description="Number of examples in each batch. A larger batch size means that model parameters\nare updated less frequently, but with lower variance.\n",
     )
-    learning_rate_multiplier: Optional[
-        Union[LearningRateMultiplier, PositiveFloat]
-    ] = Field(
+    learning_rate_multiplier: Optional[Union[Literal["auto"], PositiveFloat]] = Field(
         "auto",
         description="Scaling factor for the learning rate. A smaller learning rate may be useful to avoid\noverfitting.\n",
     )
-    n_epochs: Optional[Union[NEpochs, conint(ge=1, le=50)]] = Field(
+    n_epochs: Optional[Union[Literal["auto"], conint(ge=1, le=50)]] = Field(
         "auto",
         description="The number of epochs to train the model for. An epoch refers to one full cycle \nthrough the training dataset.\n",
     )
@@ -1314,7 +911,7 @@ class CreateFineTuningJobRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    model: Union[str, Model8] = Field(
+    model: Union[str, Literal["babbage-002", "davinci-002", "gpt-3.5-turbo"]] = Field(
         ...,
         description="The name of the model to fine-tune. You can select one of the\n[supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).\n",
         examples=["gpt-3.5-turbo"],
@@ -1338,20 +935,6 @@ class CreateFineTuningJobRequest(BaseModel):
     )
 
 
-class Object9(Enum):
-    list = "list"
-
-
-class NEpochs1(Enum):
-    """
-    The number of epochs to train the model for. An epoch refers to one
-    full cycle through the training dataset.
-
-    """
-
-    auto = "auto"
-
-
 class Hyperparameters1(BaseModel):
     """
     The hyperparameters used for the fine-tuning job.
@@ -1360,25 +943,10 @@ class Hyperparameters1(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    n_epochs: Optional[Union[NEpochs1, conint(ge=1, le=50)]] = Field(
+    n_epochs: Optional[Union[Literal["auto"], conint(ge=1, le=50)]] = Field(
         "auto",
         description="The number of epochs to train the model for. An epoch refers to one\nfull cycle through the training dataset.\n",
     )
-
-
-class Model9(Enum):
-    """
-    The name of the base model to fine-tune. You can select one of "ada",
-    "babbage", "curie", "davinci", or a fine-tuned model created after 2022-04-21 and before 2023-08-22.
-    To learn more about these models, see the
-    [Models](/docs/models) documentation.
-
-    """
-
-    ada = "ada"
-    babbage = "babbage"
-    curie = "curie"
-    davinci = "davinci"
 
 
 class CreateFineTuneRequest(BaseModel):
@@ -1418,7 +986,7 @@ class CreateFineTuneRequest(BaseModel):
         None,
         description="The learning rate multiplier to use for training.\nThe fine-tuning learning rate is the original learning rate used for\npretraining multiplied by this value.\n\nBy default, the learning rate multiplier is the 0.05, 0.1, or 0.2\ndepending on final `batch_size` (larger learning rates tend to\nperform better with larger batch sizes). We recommend experimenting\nwith values in the range 0.02 to 0.2 to see what produces the best\nresults.\n",
     )
-    model: Optional[Union[str, Model9]] = Field(
+    model: Optional[Union[str, Literal["ada", "babbage", "curie", "davinci"]]] = Field(
         "curie",
         description='The name of the base model to fine-tune. You can select one of "ada",\n"babbage", "curie", "davinci", or a fine-tuned model created after 2022-04-21 and before 2023-08-22.\nTo learn more about these models, see the\n[Models](/docs/models) documentation.\n',
         examples=["curie"],
@@ -1442,24 +1010,6 @@ class InputItem(RootModel[List[Any]]):
     root: List[Any]
 
 
-class Model10(Enum):
-    """
-    ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.
-
-    """
-
-    text_embedding_ada_002 = "text-embedding-ada-002"
-
-
-class EncodingFormat(Enum):
-    """
-    The format to return the embeddings in. Can be either `float` or [`base64`](https://pypi.org/project/pybase64/).
-    """
-
-    float = "float"
-    base64 = "base64"
-
-
 class CreateEmbeddingRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1469,12 +1019,12 @@ class CreateEmbeddingRequest(BaseModel):
         description="Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for `text-embedding-ada-002`), cannot be an empty string, and any array must be 2048 dimensions or less. [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken) for counting tokens.\n",
         examples=["The quick brown fox jumped over the lazy dog"],
     )
-    model: Union[str, Model10] = Field(
+    model: Union[str, Literal["text-embedding-ada-002"]] = Field(
         ...,
         description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
         examples=["text-embedding-ada-002"],
     )
-    encoding_format: Optional[EncodingFormat] = Field(
+    encoding_format: Optional[Literal["float", "base64"]] = Field(
         "float",
         description="The format to return the embeddings in. Can be either `float` or [`base64`](https://pypi.org/project/pybase64/).",
         examples=["float"],
@@ -1484,14 +1034,6 @@ class CreateEmbeddingRequest(BaseModel):
         description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
         examples=["user-1234"],
     )
-
-
-class Object12(Enum):
-    """
-    The object type, which is always "list".
-    """
-
-    list = "list"
 
 
 class Usage(BaseModel):
@@ -1510,28 +1052,6 @@ class Usage(BaseModel):
     )
 
 
-class Model11(Enum):
-    """
-    ID of the model to use. Only `whisper-1` is currently available.
-
-    """
-
-    whisper_1 = "whisper-1"
-
-
-class ResponseFormat4(Enum):
-    """
-    The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.
-
-    """
-
-    json = "json"
-    text = "text"
-    srt = "srt"
-    verbose_json = "verbose_json"
-    vtt = "vtt"
-
-
 class CreateTranscriptionRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1540,7 +1060,7 @@ class CreateTranscriptionRequest(BaseModel):
         ...,
         description="The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n",
     )
-    model: Union[str, Model11] = Field(
+    model: Union[str, Literal["whisper-1"]] = Field(
         ...,
         description="ID of the model to use. Only `whisper-1` is currently available.\n",
         examples=["whisper-1"],
@@ -1553,7 +1073,9 @@ class CreateTranscriptionRequest(BaseModel):
         None,
         description="An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.\n",
     )
-    response_format: Optional[ResponseFormat4] = Field(
+    response_format: Optional[
+        Literal["json", "text", "srt", "verbose_json", "vtt"]
+    ] = Field(
         "json",
         description="The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.\n",
     )
@@ -1578,7 +1100,7 @@ class CreateTranslationRequest(BaseModel):
         ...,
         description="The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n",
     )
-    model: Union[str, Model11] = Field(
+    model: Union[str, Literal["whisper-1"]] = Field(
         ...,
         description="ID of the model to use. Only `whisper-1` is currently available.\n",
         examples=["whisper-1"],
@@ -1604,45 +1126,11 @@ class CreateTranslationResponse(BaseModel):
     text: str
 
 
-class Model13(Enum):
-    """
-    One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd`
-
-    """
-
-    tts_1 = "tts-1"
-    tts_1_hd = "tts-1-hd"
-
-
-class Voice(Enum):
-    """
-    The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the [Text to speech guide](/docs/guides/text-to-speech/voice-options).
-    """
-
-    alloy = "alloy"
-    echo = "echo"
-    fable = "fable"
-    onyx = "onyx"
-    nova = "nova"
-    shimmer = "shimmer"
-
-
-class ResponseFormat5(Enum):
-    """
-    The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`.
-    """
-
-    mp3 = "mp3"
-    opus = "opus"
-    aac = "aac"
-    flac = "flac"
-
-
 class CreateSpeechRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    model: Union[str, Model13] = Field(
+    model: Union[str, Literal["tts-1", "tts-1-hd"]] = Field(
         ...,
         description="One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd`\n",
     )
@@ -1650,11 +1138,11 @@ class CreateSpeechRequest(BaseModel):
         ...,
         description="The text to generate audio for. The maximum length is 4096 characters.",
     )
-    voice: Voice = Field(
+    voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"] = Field(
         ...,
         description="The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the [Text to speech guide](/docs/guides/text-to-speech/voice-options).",
     )
-    response_format: Optional[ResponseFormat5] = Field(
+    response_format: Optional[Literal["mp3", "opus", "aac", "flac"]] = Field(
         "mp3",
         description="The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`.",
     )
@@ -1662,14 +1150,6 @@ class CreateSpeechRequest(BaseModel):
         1,
         description="The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.",
     )
-
-
-class Object13(Enum):
-    """
-    The object type, which is always "model".
-    """
-
-    model = "model"
 
 
 class Model(BaseModel):
@@ -1687,39 +1167,10 @@ class Model(BaseModel):
     created: int = Field(
         ..., description="The Unix timestamp (in seconds) when the model was created."
     )
-    object: Object13 = Field(
+    object: Literal["model"] = Field(
         ..., description='The object type, which is always "model".'
     )
     owned_by: str = Field(..., description="The organization that owns the model.")
-
-
-class Object14(Enum):
-    """
-    The object type, which is always `file`.
-    """
-
-    file = "file"
-
-
-class Purpose1(Enum):
-    """
-    The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`, `assistants`, and `assistants_output`.
-    """
-
-    fine_tune = "fine-tune"
-    fine_tune_results = "fine-tune-results"
-    assistants = "assistants"
-    assistants_output = "assistants_output"
-
-
-class Status(Enum):
-    """
-    Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or `error`.
-    """
-
-    uploaded = "uploaded"
-    processed = "processed"
-    error = "error"
 
 
 class OpenAIFile(BaseModel):
@@ -1740,14 +1191,16 @@ class OpenAIFile(BaseModel):
         description="The Unix timestamp (in seconds) for when the file was created.",
     )
     filename: str = Field(..., description="The name of the file.")
-    object: Object14 = Field(
+    object: Literal["file"] = Field(
         ..., description="The object type, which is always `file`."
     )
-    purpose: Purpose1 = Field(
+    purpose: Literal[
+        "fine-tune", "fine-tune-results", "assistants", "assistants_output"
+    ] = Field(
         ...,
         description="The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`, `assistants`, and `assistants_output`.",
     )
-    status: Status = Field(
+    status: Literal["uploaded", "processed", "error"] = Field(
         ...,
         description="Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or `error`.",
     )
@@ -1755,14 +1208,6 @@ class OpenAIFile(BaseModel):
         None,
         description="Deprecated. For details on why a fine-tuning training file failed validation, see the `error` field on `fine_tuning.job`.",
     )
-
-
-class Object15(Enum):
-    """
-    The object type, which is always "embedding".
-    """
-
-    embedding = "embedding"
 
 
 class Embedding(BaseModel):
@@ -1781,7 +1226,7 @@ class Embedding(BaseModel):
         ...,
         description="The embedding vector, which is a list of floats. The length of vector depends on the model as listed in the [embedding guide](/docs/guides/embeddings).\n",
     )
-    object: Object15 = Field(
+    object: Literal["embedding"] = Field(
         ..., description='The object type, which is always "embedding".'
     )
 
@@ -1802,15 +1247,6 @@ class Error1(BaseModel):
     )
 
 
-class NEpochs2(Enum):
-    """
-    The number of epochs to train the model for. An epoch refers to one full cycle through the training dataset.
-    "auto" decides the optimal number of epochs based on the size of the dataset. If setting the number manually, we support any number between 1 and 50 epochs.
-    """
-
-    auto = "auto"
-
-
 class Hyperparameters2(BaseModel):
     """
     The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.
@@ -1819,31 +1255,10 @@ class Hyperparameters2(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    n_epochs: Union[NEpochs2, conint(ge=1, le=50)] = Field(
+    n_epochs: Union[Literal["auto"], conint(ge=1, le=50)] = Field(
         ...,
         description='The number of epochs to train the model for. An epoch refers to one full cycle through the training dataset.\n"auto" decides the optimal number of epochs based on the size of the dataset. If setting the number manually, we support any number between 1 and 50 epochs.',
     )
-
-
-class Object16(Enum):
-    """
-    The object type, which is always "fine_tuning.job".
-    """
-
-    fine_tuning_job = "fine_tuning.job"
-
-
-class Status1(Enum):
-    """
-    The current status of the fine-tuning job, which can be either `validating_files`, `queued`, `running`, `succeeded`, `failed`, or `cancelled`.
-    """
-
-    validating_files = "validating_files"
-    queued = "queued"
-    running = "running"
-    succeeded = "succeeded"
-    failed = "failed"
-    cancelled = "cancelled"
 
 
 class FineTuningJob(BaseModel):
@@ -1880,7 +1295,7 @@ class FineTuningJob(BaseModel):
         description="The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.",
     )
     model: str = Field(..., description="The base model that is being fine-tuned.")
-    object: Object16 = Field(
+    object: Literal["fine_tuning.job"] = Field(
         ..., description='The object type, which is always "fine_tuning.job".'
     )
     organization_id: str = Field(
@@ -1890,7 +1305,9 @@ class FineTuningJob(BaseModel):
         ...,
         description="The compiled results file ID(s) for the fine-tuning job. You can retrieve the results with the [Files API](/docs/api-reference/files/retrieve-contents).",
     )
-    status: Status1 = Field(
+    status: Literal[
+        "validating_files", "queued", "running", "succeeded", "failed", "cancelled"
+    ] = Field(
         ...,
         description="The current status of the fine-tuning job, which can be either `validating_files`, `queued`, `running`, `succeeded`, `failed`, or `cancelled`.",
     )
@@ -1908,16 +1325,6 @@ class FineTuningJob(BaseModel):
     )
 
 
-class Level(Enum):
-    info = "info"
-    warn = "warn"
-    error = "error"
-
-
-class Object17(Enum):
-    fine_tuning_job_event = "fine_tuning.job.event"
-
-
 class FineTuningJobEvent(BaseModel):
     """
     Fine-tuning job event object
@@ -1928,9 +1335,9 @@ class FineTuningJobEvent(BaseModel):
     )
     id: str
     created_at: int
-    level: Level
+    level: Literal["info", "warn", "error"]
     message: str
-    object: Object17
+    object: Literal["fine_tuning.job.event"]
 
 
 class Hyperparams(BaseModel):
@@ -1969,18 +1376,6 @@ class Hyperparams(BaseModel):
     )
 
 
-class Object18(Enum):
-    """
-    The object type, which is always "fine-tune".
-    """
-
-    fine_tune = "fine-tune"
-
-
-class Object19(Enum):
-    fine_tune_event = "fine-tune-event"
-
-
 class FineTuneEvent(BaseModel):
     """
     Fine-tune event object
@@ -1992,7 +1387,7 @@ class FineTuneEvent(BaseModel):
     created_at: int
     level: str
     message: str
-    object: Object19
+    object: Literal["fine-tune-event"]
 
 
 class CompletionUsage(BaseModel):
@@ -2013,113 +1408,41 @@ class CompletionUsage(BaseModel):
     )
 
 
-class Object20(Enum):
-    """
-    The object type, which is always `assistant`.
-    """
-
-    assistant = "assistant"
-
-
-class Object21(Enum):
-    assistant_deleted = "assistant.deleted"
-
-
 class DeleteAssistantResponse(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
     id: str
     deleted: bool
-    object: Object21
-
-
-class Type7(Enum):
-    """
-    The type of tool being defined: `code_interpreter`
-    """
-
-    code_interpreter = "code_interpreter"
+    object: Literal["assistant.deleted"]
 
 
 class AssistantToolsCode(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type7 = Field(
+    type: Literal["code_interpreter"] = Field(
         ..., description="The type of tool being defined: `code_interpreter`"
     )
-
-
-class Type8(Enum):
-    """
-    The type of tool being defined: `retrieval`
-    """
-
-    retrieval = "retrieval"
 
 
 class AssistantToolsRetrieval(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type8 = Field(..., description="The type of tool being defined: `retrieval`")
-
-
-class Type9(Enum):
-    """
-    The type of tool being defined: `function`
-    """
-
-    function = "function"
+    type: Literal["retrieval"] = Field(
+        ..., description="The type of tool being defined: `retrieval`"
+    )
 
 
 class AssistantToolsFunction(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type9 = Field(..., description="The type of tool being defined: `function`")
+    type: Literal["function"] = Field(
+        ..., description="The type of tool being defined: `function`"
+    )
     function: FunctionObject
-
-
-class Object22(Enum):
-    """
-    The object type, which is always `thread.run`.
-    """
-
-    thread_run = "thread.run"
-
-
-class Status2(Enum):
-    """
-    The status of the run, which can be either `queued`, `in_progress`, `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`, or `expired`.
-    """
-
-    queued = "queued"
-    in_progress = "in_progress"
-    requires_action = "requires_action"
-    cancelling = "cancelling"
-    cancelled = "cancelled"
-    failed = "failed"
-    completed = "completed"
-    expired = "expired"
-
-
-class Type10(Enum):
-    """
-    For now, this is always `submit_tool_outputs`.
-    """
-
-    submit_tool_outputs = "submit_tool_outputs"
-
-
-class Code(Enum):
-    """
-    One of `server_error` or `rate_limit_exceeded`.
-    """
-
-    server_error = "server_error"
-    rate_limit_exceeded = "rate_limit_exceeded"
 
 
 class LastError(BaseModel):
@@ -2130,7 +1453,7 @@ class LastError(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    code: Code = Field(
+    code: Literal["server_error", "rate_limit_exceeded"] = Field(
         ..., description="One of `server_error` or `rate_limit_exceeded`."
     )
     message: str = Field(..., description="A human-readable description of the error.")
@@ -2198,14 +1521,6 @@ class SubmitToolOutputsRunRequest(BaseModel):
     )
 
 
-class Type11(Enum):
-    """
-    The type of tool call the output is required for. For now, this is always `function`.
-    """
-
-    function = "function"
-
-
 class Function3(BaseModel):
     """
     The function definition.
@@ -2233,19 +1548,11 @@ class RunToolCallObject(BaseModel):
         ...,
         description="The ID of the tool call. This ID must be referenced when you submit the tool outputs in using the [Submit tool outputs to run](/docs/api-reference/runs/submitToolOutputs) endpoint.",
     )
-    type: Type11 = Field(
+    type: Literal["function"] = Field(
         ...,
         description="The type of tool call the output is required for. For now, this is always `function`.",
     )
     function: Function3 = Field(..., description="The function definition.")
-
-
-class Object23(Enum):
-    """
-    The object type, which is always `thread`.
-    """
-
-    thread = "thread"
 
 
 class ThreadObject(BaseModel):
@@ -2259,7 +1566,7 @@ class ThreadObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object23 = Field(
+    object: Literal["thread"] = Field(
         ..., description="The object type, which is always `thread`."
     )
     created_at: int = Field(
@@ -2282,17 +1589,13 @@ class ModifyThreadRequest(BaseModel):
     )
 
 
-class Object24(Enum):
-    thread_deleted = "thread.deleted"
-
-
 class DeleteThreadResponse(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
     id: str
     deleted: bool
-    object: Object24
+    object: Literal["thread.deleted"]
 
 
 class ListThreadsResponse(BaseModel):
@@ -2306,36 +1609,11 @@ class ListThreadsResponse(BaseModel):
     has_more: bool = Field(..., examples=[False])
 
 
-class Object25(Enum):
-    """
-    The object type, which is always `thread.message`.
-    """
-
-    thread_message = "thread.message"
-
-
-class Role7(Enum):
-    """
-    The entity that produced the message. One of `user` or `assistant`.
-    """
-
-    user = "user"
-    assistant = "assistant"
-
-
-class Role8(Enum):
-    """
-    The role of the entity that is creating the message. Currently only `user` is supported.
-    """
-
-    user = "user"
-
-
 class CreateMessageRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    role: Role8 = Field(
+    role: Literal["user"] = Field(
         ...,
         description="The role of the entity that is creating the message. Currently only `user` is supported.",
     )
@@ -2362,25 +1640,13 @@ class ModifyMessageRequest(BaseModel):
     )
 
 
-class Object26(Enum):
-    thread_message_deleted = "thread.message.deleted"
-
-
 class DeleteMessageResponse(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
     id: str
     deleted: bool
-    object: Object26
-
-
-class Type12(Enum):
-    """
-    Always `image_file`.
-    """
-
-    image_file = "image_file"
+    object: Literal["thread.message.deleted"]
 
 
 class ImageFile(BaseModel):
@@ -2401,24 +1667,8 @@ class MessageContentImageFileObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type12 = Field(..., description="Always `image_file`.")
+    type: Literal["image_file"] = Field(..., description="Always `image_file`.")
     image_file: ImageFile
-
-
-class Type13(Enum):
-    """
-    Always `text`.
-    """
-
-    text = "text"
-
-
-class Type14(Enum):
-    """
-    Always `file_citation`.
-    """
-
-    file_citation = "file_citation"
 
 
 class FileCitation(BaseModel):
@@ -2439,21 +1689,13 @@ class MessageContentTextAnnotationsFileCitationObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type14 = Field(..., description="Always `file_citation`.")
+    type: Literal["file_citation"] = Field(..., description="Always `file_citation`.")
     text: str = Field(
         ..., description="The text in the message content that needs to be replaced."
     )
     file_citation: FileCitation
     start_index: conint(ge=0)
     end_index: conint(ge=0)
-
-
-class Type15(Enum):
-    """
-    Always `file_path`.
-    """
-
-    file_path = "file_path"
 
 
 class FilePath(BaseModel):
@@ -2471,42 +1713,13 @@ class MessageContentTextAnnotationsFilePathObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type15 = Field(..., description="Always `file_path`.")
+    type: Literal["file_path"] = Field(..., description="Always `file_path`.")
     text: str = Field(
         ..., description="The text in the message content that needs to be replaced."
     )
     file_path: FilePath
     start_index: conint(ge=0)
     end_index: conint(ge=0)
-
-
-class Object27(Enum):
-    """
-    The object type, which is always `thread.run.step``.
-    """
-
-    thread_run_step = "thread.run.step"
-
-
-class Type16(Enum):
-    """
-    The type of run step, which can be either `message_creation` or `tool_calls`.
-    """
-
-    message_creation = "message_creation"
-    tool_calls = "tool_calls"
-
-
-class Status3(Enum):
-    """
-    The status of the run step, which can be either `in_progress`, `cancelled`, `failed`, `completed`, or `expired`.
-    """
-
-    in_progress = "in_progress"
-    cancelled = "cancelled"
-    failed = "failed"
-    completed = "completed"
-    expired = "expired"
 
 
 class LastError1(BaseModel):
@@ -2517,18 +1730,10 @@ class LastError1(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    code: Code = Field(
+    code: Literal["server_error", "rate_limit_exceeded"] = Field(
         ..., description="One of `server_error` or `rate_limit_exceeded`."
     )
     message: str = Field(..., description="A human-readable description of the error.")
-
-
-class Type17(Enum):
-    """
-    Always `message_creation``.
-    """
-
-    message_creation = "message_creation"
 
 
 class MessageCreation(BaseModel):
@@ -2548,32 +1753,10 @@ class RunStepDetailsMessageCreationObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type17 = Field(..., description="Always `message_creation``.")
+    type: Literal["message_creation"] = Field(
+        ..., description="Always `message_creation``."
+    )
     message_creation: MessageCreation
-
-
-class Type18(Enum):
-    """
-    Always `tool_calls`.
-    """
-
-    tool_calls = "tool_calls"
-
-
-class Type19(Enum):
-    """
-    The type of tool call. This is always going to be `code_interpreter` for this type of tool call.
-    """
-
-    code_interpreter = "code_interpreter"
-
-
-class Type20(Enum):
-    """
-    Always `logs`.
-    """
-
-    logs = "logs"
 
 
 class RunStepDetailsToolCallsCodeOutputLogsObject(BaseModel):
@@ -2584,18 +1767,10 @@ class RunStepDetailsToolCallsCodeOutputLogsObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type20 = Field(..., description="Always `logs`.")
+    type: Literal["logs"] = Field(..., description="Always `logs`.")
     logs: str = Field(
         ..., description="The text output from the Code Interpreter tool call."
     )
-
-
-class Type21(Enum):
-    """
-    Always `image`.
-    """
-
-    image = "image"
 
 
 class Image1(BaseModel):
@@ -2611,16 +1786,8 @@ class RunStepDetailsToolCallsCodeOutputImageObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type21 = Field(..., description="Always `image`.")
+    type: Literal["image"] = Field(..., description="Always `image`.")
     image: Image1
-
-
-class Type22(Enum):
-    """
-    The type of tool call. This is always going to be `retrieval` for this type of tool call.
-    """
-
-    retrieval = "retrieval"
 
 
 class RunStepDetailsToolCallsRetrievalObject(BaseModel):
@@ -2628,21 +1795,13 @@ class RunStepDetailsToolCallsRetrievalObject(BaseModel):
         extra="allow",
     )
     id: str = Field(..., description="The ID of the tool call object.")
-    type: Type22 = Field(
+    type: Literal["retrieval"] = Field(
         ...,
         description="The type of tool call. This is always going to be `retrieval` for this type of tool call.",
     )
     retrieval: Dict[str, Any] = Field(
         ..., description="For now, this is always going to be an empty object."
     )
-
-
-class Type23(Enum):
-    """
-    The type of tool call. This is always going to be `function` for this type of tool call.
-    """
-
-    function = "function"
 
 
 class Function4(BaseModel):
@@ -2666,21 +1825,13 @@ class RunStepDetailsToolCallsFunctionObject(BaseModel):
         extra="allow",
     )
     id: str = Field(..., description="The ID of the tool call object.")
-    type: Type23 = Field(
+    type: Literal["function"] = Field(
         ...,
         description="The type of tool call. This is always going to be `function` for this type of tool call.",
     )
     function: Function4 = Field(
         ..., description="The definition of the function that was called."
     )
-
-
-class Object28(Enum):
-    """
-    The object type, which is always `assistant.file`.
-    """
-
-    assistant_file = "assistant.file"
 
 
 class AssistantFileObject(BaseModel):
@@ -2694,7 +1845,7 @@ class AssistantFileObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object28 = Field(
+    object: Literal["assistant.file"] = Field(
         ..., description="The object type, which is always `assistant.file`."
     )
     created_at: int = Field(
@@ -2716,10 +1867,6 @@ class CreateAssistantFileRequest(BaseModel):
     )
 
 
-class Object29(Enum):
-    assistant_file_deleted = "assistant.file.deleted"
-
-
 class DeleteAssistantFileResponse(BaseModel):
     """
     Deletes the association between the assistant and the file, but does not delete the [File](/docs/api-reference/files) object itself.
@@ -2730,7 +1877,7 @@ class DeleteAssistantFileResponse(BaseModel):
     )
     id: str
     deleted: bool
-    object: Object29
+    object: Literal["assistant.file.deleted"]
 
 
 class ListAssistantFilesResponse(BaseModel):
@@ -2744,14 +1891,6 @@ class ListAssistantFilesResponse(BaseModel):
     has_more: bool = Field(..., examples=[False])
 
 
-class Object30(Enum):
-    """
-    The object type, which is always `thread.message.file`.
-    """
-
-    thread_message_file = "thread.message.file"
-
-
 class MessageFileObject(BaseModel):
     """
     A list of files attached to a `message`.
@@ -2763,7 +1902,7 @@ class MessageFileObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object30 = Field(
+    object: Literal["thread.message.file"] = Field(
         ..., description="The object type, which is always `thread.message.file`."
     )
     created_at: int = Field(
@@ -2791,7 +1930,7 @@ class ListModelsResponse(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    object: Object
+    object: Literal["list"]
     data: List[Model]
 
 
@@ -2818,7 +1957,7 @@ class CreateCompletionResponse(BaseModel):
         None,
         description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
-    object: Object1 = Field(
+    object: Literal["text_completion"] = Field(
         ..., description='The object type, which is always "text_completion"'
     )
     usage: Optional[CompletionUsage] = None
@@ -2845,7 +1984,7 @@ class ChatCompletionRequestUserMessage(BaseModel):
     content: Union[SecretStr, List[ChatCompletionRequestMessageContentPart]] = Field(
         ..., description="The contents of the user message.\n"
     )
-    role: Role1 = Field(
+    role: Literal["user"] = Field(
         ..., description="The role of the messages author, in this case `user`."
     )
     name: Optional[str] = Field(
@@ -2858,7 +1997,7 @@ class ChatCompletionTool(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type2 = Field(
+    type: Literal["function"] = Field(
         ...,
         description="The type of the tool. Currently, only `function` is supported.",
     )
@@ -2866,9 +2005,9 @@ class ChatCompletionTool(BaseModel):
 
 
 class ChatCompletionToolChoiceOption(
-    RootModel[Union[ChatCompletionToolChoiceOption1, ChatCompletionNamedToolChoice]]
+    RootModel[Union[Literal["none", "auto"], ChatCompletionNamedToolChoice]]
 ):
-    root: Union[ChatCompletionToolChoiceOption1, ChatCompletionNamedToolChoice] = Field(
+    root: Union[Literal["none", "auto"], ChatCompletionNamedToolChoice] = Field(
         ...,
         description='Controls which (if any) function is called by the model.\n`none` means the model will not call a function and instead generates a message.\n`auto` means the model can pick between generating a message or calling a function.\nSpecifying a particular function via `{"type: "function", "function": {"name": "my_function"}}` forces the model to call that function.\n\n`none` is the default when no functions are present. `auto` is the default if functions are present.\n',
     )
@@ -2895,7 +2034,9 @@ class ChatCompletionResponseMessage(BaseModel):
     )
     content: SecretStr = Field(..., description="The contents of the message.")
     tool_calls: Optional[ChatCompletionMessageToolCalls] = None
-    role: Role5 = Field(..., description="The role of the author of this message.")
+    role: Literal["assistant"] = Field(
+        ..., description="The role of the author of this message."
+    )
     function_call: Optional[FunctionCall] = Field(
         None,
         description="Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.",
@@ -2906,7 +2047,9 @@ class Choice1(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    finish_reason: FinishReason1 = Field(
+    finish_reason: Literal[
+        "stop", "length", "tool_calls", "content_filter", "function_call"
+    ] = Field(
         ...,
         description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n",
     )
@@ -2938,7 +2081,7 @@ class CreateChatCompletionResponse(BaseModel):
         None,
         description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
-    object: Object2 = Field(
+    object: Literal["chat.completion"] = Field(
         ..., description="The object type, which is always `chat.completion`."
     )
     usage: Optional[CompletionUsage] = None
@@ -2948,7 +2091,7 @@ class Choice2(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    finish_reason: FinishReason2 = Field(
+    finish_reason: Literal["stop", "length", "function_call", "content_filter"] = Field(
         ...,
         description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, or `function_call` if the model called a function.\n",
     )
@@ -2980,7 +2123,7 @@ class CreateChatCompletionFunctionResponse(BaseModel):
         None,
         description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
-    object: Object2 = Field(
+    object: Literal["chat.completion"] = Field(
         ..., description="The object type, which is always `chat.completion`."
     )
     usage: Optional[CompletionUsage] = None
@@ -2992,7 +2135,7 @@ class ListPaginatedFineTuningJobsResponse(BaseModel):
     )
     data: List[FineTuningJob]
     has_more: bool
-    object: Object4
+    object: Literal["list"]
 
 
 class CreateEditResponse(BaseModel):
@@ -3003,7 +2146,9 @@ class CreateEditResponse(BaseModel):
         ...,
         description="A list of edit choices. Can be more than one if `n` is greater than 1.",
     )
-    object: Object6 = Field(..., description="The object type, which is always `edit`.")
+    object: Literal["edit"] = Field(
+        ..., description="The object type, which is always `edit`."
+    )
     created: int = Field(
         ..., description="The Unix timestamp (in seconds) of when the edit was created."
     )
@@ -3023,7 +2168,7 @@ class ListFilesResponse(BaseModel):
         extra="allow",
     )
     data: List[OpenAIFile]
-    object: Object7
+    object: Literal["list"]
 
 
 class ListFineTuningJobEventsResponse(BaseModel):
@@ -3031,7 +2176,7 @@ class ListFineTuningJobEventsResponse(BaseModel):
         extra="allow",
     )
     data: List[FineTuningJobEvent]
-    object: Object9
+    object: Literal["list"]
 
 
 class ListFineTuneEventsResponse(BaseModel):
@@ -3039,7 +2184,7 @@ class ListFineTuneEventsResponse(BaseModel):
         extra="allow",
     )
     data: List[FineTuneEvent]
-    object: Object9
+    object: Literal["list"]
 
 
 class CreateEmbeddingResponse(BaseModel):
@@ -3052,7 +2197,7 @@ class CreateEmbeddingResponse(BaseModel):
     model: str = Field(
         ..., description="The name of the model used to generate the embedding."
     )
-    object: Object12 = Field(
+    object: Literal["list"] = Field(
         ..., description='The object type, which is always "list".'
     )
     usage: Usage = Field(..., description="The usage information for the request.")
@@ -3087,7 +2232,7 @@ class FineTune(BaseModel):
         description="The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/legacy-fine-tuning/hyperparameters) for more details.",
     )
     model: str = Field(..., description="The base model that is being fine-tuned.")
-    object: Object18 = Field(
+    object: Literal["fine-tune"] = Field(
         ..., description='The object type, which is always "fine-tune".'
     )
     organization_id: str = Field(
@@ -3123,7 +2268,7 @@ class AssistantObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object20 = Field(
+    object: Literal["assistant"] = Field(
         ..., description="The object type, which is always `assistant`."
     )
     created_at: int = Field(
@@ -3272,7 +2417,7 @@ class RequiredAction(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type10 = Field(
+    type: Literal["submit_tool_outputs"] = Field(
         ..., description="For now, this is always `submit_tool_outputs`."
     )
     submit_tool_outputs: SubmitToolOutputs = Field(
@@ -3291,7 +2436,7 @@ class RunObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object22 = Field(
+    object: Literal["thread.run"] = Field(
         ..., description="The object type, which is always `thread.run`."
     )
     created_at: int = Field(
@@ -3305,7 +2450,16 @@ class RunObject(BaseModel):
         ...,
         description="The ID of the [assistant](/docs/api-reference/assistants) used for execution of this run.",
     )
-    status: Status2 = Field(
+    status: Literal[
+        "queued",
+        "in_progress",
+        "requires_action",
+        "cancelling",
+        "cancelled",
+        "failed",
+        "completed",
+        "expired",
+    ] = Field(
         ...,
         description="The status of the run, which can be either `queued`, `in_progress`, `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`, or `expired`.",
     )
@@ -3405,7 +2559,7 @@ class MessageContentTextObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type13 = Field(..., description="Always `text`.")
+    type: Literal["text"] = Field(..., description="Always `text`.")
     text: Text
 
 
@@ -3438,7 +2592,7 @@ class RunStepDetailsToolCallsCodeObject(BaseModel):
         extra="allow",
     )
     id: str = Field(..., description="The ID of the tool call.")
-    type: Type19 = Field(
+    type: Literal["code_interpreter"] = Field(
         ...,
         description="The type of tool call. This is always going to be `code_interpreter` for this type of tool call.",
     )
@@ -3454,7 +2608,7 @@ class ChatCompletionRequestAssistantMessage(BaseModel):
     content: SecretStr = Field(
         ..., description="The contents of the assistant message.\n"
     )
-    role: Role2 = Field(
+    role: Literal["assistant"] = Field(
         ..., description="The role of the messages author, in this case `assistant`."
     )
     name: Optional[str] = Field(
@@ -3473,7 +2627,7 @@ class ListFineTunesResponse(BaseModel):
         extra="allow",
     )
     data: List[FineTune]
-    object: Object9
+    object: Literal["list"]
 
 
 class CreateThreadAndRunRequest(BaseModel):
@@ -3519,7 +2673,7 @@ class MessageObject(BaseModel):
     id: str = Field(
         ..., description="The identifier, which can be referenced in API endpoints."
     )
-    object: Object25 = Field(
+    object: Literal["thread.message"] = Field(
         ..., description="The object type, which is always `thread.message`."
     )
     created_at: int = Field(
@@ -3530,7 +2684,7 @@ class MessageObject(BaseModel):
         ...,
         description="The [thread](/docs/api-reference/threads) ID that this message belongs to.",
     )
-    role: Role7 = Field(
+    role: Literal["user", "assistant"] = Field(
         ...,
         description="The entity that produced the message. One of `user` or `assistant`.",
     )
@@ -3577,7 +2731,7 @@ class RunStepDetailsToolCallsObject(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    type: Type18 = Field(..., description="Always `tool_calls`.")
+    type: Literal["tool_calls"] = Field(..., description="Always `tool_calls`.")
     tool_calls: List[
         Union[
             RunStepDetailsToolCallsCodeObject,
@@ -3619,7 +2773,25 @@ class CreateChatCompletionRequest(BaseModel):
         description="A list of messages comprising the conversation so far. [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).",
         min_length=1,
     )
-    model: Union[str, Model2] = Field(
+    model: Union[
+        str,
+        Literal[
+            "gpt-4-1106-preview",
+            "gpt-4-vision-preview",
+            "gpt-4",
+            "gpt-4-0314",
+            "gpt-4-0613",
+            "gpt-4-32k",
+            "gpt-4-32k-0314",
+            "gpt-4-32k-0613",
+            "gpt-3.5-turbo",
+            "gpt-3.5-turbo-16k",
+            "gpt-3.5-turbo-0301",
+            "gpt-3.5-turbo-0613",
+            "gpt-3.5-turbo-1106",
+            "gpt-3.5-turbo-16k-0613",
+        ],
+    ] = Field(
         ...,
         description="ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility) table for details on which models work with the Chat API.",
         examples=["gpt-3.5-turbo"],
@@ -3682,7 +2854,7 @@ class CreateChatCompletionRequest(BaseModel):
         examples=["user-1234"],
     )
     function_call: Optional[
-        Union[FunctionCall3, ChatCompletionFunctionCallOption]
+        Union[Literal["none", "auto"], ChatCompletionFunctionCallOption]
     ] = Field(
         None,
         description='Deprecated in favor of `tool_choice`.\n\nControls which (if any) function is called by the model.\n`none` means the model will not call a function and instead generates a message.\n`auto` means the model can pick between generating a message or calling a function.\nSpecifying a particular function via `{"name": "my_function"}` forces the model to call that function.\n\n`none` is the default when no functions are present. `auto`` is the default if functions are present.\n',
@@ -3708,7 +2880,7 @@ class RunStepObject(BaseModel):
         ...,
         description="The identifier of the run step, which can be referenced in API endpoints.",
     )
-    object: Object27 = Field(
+    object: Literal["thread.run.step"] = Field(
         ..., description="The object type, which is always `thread.run.step``."
     )
     created_at: int = Field(
@@ -3727,11 +2899,13 @@ class RunStepObject(BaseModel):
         ...,
         description="The ID of the [run](/docs/api-reference/runs) that this run step is a part of.",
     )
-    type: Type16 = Field(
+    type: Literal["message_creation", "tool_calls"] = Field(
         ...,
         description="The type of run step, which can be either `message_creation` or `tool_calls`.",
     )
-    status: Status3 = Field(
+    status: Literal[
+        "in_progress", "cancelled", "failed", "completed", "expired"
+    ] = Field(
         ...,
         description="The status of the run step, which can be either `in_progress`, `cancelled`, `failed`, `completed`, or `expired`.",
     )
