@@ -14,6 +14,9 @@ uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 [tool.poetry.group.dev.dependencies]
 datamodel-code-generator = "^0.25.1"
 yq = "^3.2.3"
+pylint = {extras = ["spelling"], version = "^3.0.2"}
+black = "^23.11.0"
+isort = "^5.12.0"
 
 [build-system]
 requires = ["poetry-core"]

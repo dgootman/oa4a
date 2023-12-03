@@ -1,19 +1,21 @@
-.PHONY: install run model
+.PHONY: build install model format lint run
 
 SHELL := /bin/bash -euo pipefail
+
+build: install model format lint
 
 install:
 	poetry install
 
-run:
-	poetry run uvicorn oa4a.server:app --reload
-
 define MODEL_HEADER
-'''
+"""
 OpenAI Data Models
 
 Auto-generated from https://github.com/openai/openai-openapi
-'''
+"""
+
+# isort: skip_file
+# pylint: skip-file
 endef
 export MODEL_HEADER
 
@@ -27,3 +29,13 @@ oa4a/model.py: openai-openapi/openapi.yaml
 			--custom-file-header "$${MODEL_HEADER}" \
 			--use-schema-description --disable-timestamp --allow-extra-fields \
 			--output oa4a/model.py --output-model-type pydantic_v2.BaseModel
+
+format:
+	poetry run isort oa4a
+	poetry run black oa4a
+
+lint:
+	poetry run pylint oa4a
+
+run:
+	poetry run uvicorn oa4a.server:app --reload

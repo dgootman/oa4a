@@ -1,8 +1,11 @@
-'''
+"""
 OpenAI Data Models
 
 Auto-generated from https://github.com/openai/openai-openapi
-'''
+"""
+
+# isort: skip_file
+# pylint: skip-file
 
 from __future__ import annotations
 
@@ -25,7 +28,7 @@ from pydantic import (
 
 class Error(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     code: str
     message: str
@@ -35,18 +38,18 @@ class Error(BaseModel):
 
 class ErrorResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     error: Error
 
 
 class Object(Enum):
-    list = 'list'
+    list = "list"
 
 
 class DeleteModelResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     deleted: bool
@@ -59,16 +62,16 @@ class Model1(Enum):
 
     """
 
-    babbage_002 = 'babbage-002'
-    davinci_002 = 'davinci-002'
-    gpt_3_5_turbo_instruct = 'gpt-3.5-turbo-instruct'
-    text_davinci_003 = 'text-davinci-003'
-    text_davinci_002 = 'text-davinci-002'
-    text_davinci_001 = 'text-davinci-001'
-    code_davinci_002 = 'code-davinci-002'
-    text_curie_001 = 'text-curie-001'
-    text_babbage_001 = 'text-babbage-001'
-    text_ada_001 = 'text-ada-001'
+    babbage_002 = "babbage-002"
+    davinci_002 = "davinci-002"
+    gpt_3_5_turbo_instruct = "gpt-3.5-turbo-instruct"
+    text_davinci_003 = "text-davinci-003"
+    text_davinci_002 = "text-davinci-002"
+    text_davinci_001 = "text-davinci-001"
+    code_davinci_002 = "code-davinci-002"
+    text_curie_001 = "text-curie-001"
+    text_babbage_001 = "text-babbage-001"
+    text_ada_001 = "text-ada-001"
 
 
 class PromptItem(RootModel[List[Any]]):
@@ -77,22 +80,22 @@ class PromptItem(RootModel[List[Any]]):
 
 class CreateCompletionRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     model: Union[str, Model1] = Field(
         ...,
-        description='ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n',
+        description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
     )
     prompt: Union[str, List[str], List[int], List[PromptItem]] = Field(
         ...,
-        description='The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.\n\nNote that <|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.\n',
+        description="The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.\n\nNote that <|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.\n",
     )
     best_of: Optional[conint(ge=0, le=20)] = Field(
         1,
         description='Generates `best_of` completions server-side and returns the "best" (the one with the highest log probability per token). Results cannot be streamed.\n\nWhen used with `n`, `best_of` controls the number of candidate completions and `n` specifies how many to return – `best_of` must be greater than `n`.\n\n**Note:** Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.\n',
     )
     echo: Optional[bool] = Field(
-        False, description='Echo back the prompt in addition to the completion\n'
+        False, description="Echo back the prompt in addition to the completion\n"
     )
     frequency_penalty: Optional[confloat(ge=-2.0, le=2.0)] = Field(
         0,
@@ -104,7 +107,7 @@ class CreateCompletionRequest(BaseModel):
     )
     logprobs: Optional[conint(ge=0, le=5)] = Field(
         None,
-        description='Include the log probabilities on the `logprobs` most likely tokens, as well the chosen tokens. For example, if `logprobs` is 5, the API will return a list of the 5 most likely tokens. The API will always return the `logprob` of the sampled token, so there may be up to `logprobs+1` elements in the response.\n\nThe maximum value for `logprobs` is 5.\n',
+        description="Include the log probabilities on the `logprobs` most likely tokens, as well the chosen tokens. For example, if `logprobs` is 5, the API will return a list of the 5 most likely tokens. The API will always return the `logprob` of the sampled token, so there may be up to `logprobs+1` elements in the response.\n\nThe maximum value for `logprobs` is 5.\n",
     )
     max_tokens: Optional[conint(ge=0)] = Field(
         16,
@@ -113,7 +116,7 @@ class CreateCompletionRequest(BaseModel):
     )
     n: Optional[conint(ge=1, le=128)] = Field(
         1,
-        description='How many completions to generate for each prompt.\n\n**Note:** Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.\n',
+        description="How many completions to generate for each prompt.\n\n**Note:** Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.\n",
         examples=[1],
     )
     presence_penalty: Optional[confloat(ge=-2.0, le=2.0)] = Field(
@@ -122,35 +125,35 @@ class CreateCompletionRequest(BaseModel):
     )
     seed: Optional[conint(ge=-9223372036854776000, le=9223372036854776000)] = Field(
         None,
-        description='If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result.\n\nDeterminism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.\n',
+        description="If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result.\n\nDeterminism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.\n",
     )
     stop: Optional[Union[str, List[str]]] = Field(
         None,
-        description='Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.\n',
+        description="Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.\n",
     )
     stream: Optional[bool] = Field(
         False,
-        description='Whether to stream back partial progress. If set, tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available, with the stream terminated by a `data: [DONE]` message. [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).\n',
+        description="Whether to stream back partial progress. If set, tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available, with the stream terminated by a `data: [DONE]` message. [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).\n",
     )
     suffix: Optional[str] = Field(
         None,
-        description='The suffix that comes after a completion of inserted text.',
-        examples=['test.'],
+        description="The suffix that comes after a completion of inserted text.",
+        examples=["test."],
     )
     temperature: Optional[confloat(ge=0.0, le=2.0)] = Field(
         1,
-        description='What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n',
+        description="What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n",
         examples=[1],
     )
     top_p: Optional[confloat(ge=0.0, le=1.0)] = Field(
         1,
-        description='An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n',
+        description="An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n",
         examples=[1],
     )
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
 
 
@@ -162,14 +165,14 @@ class FinishReason(Enum):
 
     """
 
-    stop = 'stop'
-    length = 'length'
-    content_filter = 'content_filter'
+    stop = "stop"
+    length = "length"
+    content_filter = "content_filter"
 
 
 class Logprobs(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     text_offset: Optional[List[int]] = None
     token_logprobs: Optional[List[float]] = None
@@ -179,11 +182,11 @@ class Logprobs(BaseModel):
 
 class Choice(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     finish_reason: FinishReason = Field(
         ...,
-        description='The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n',
+        description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n",
     )
     index: int
     logprobs: Logprobs
@@ -195,7 +198,7 @@ class Object1(Enum):
     The object type, which is always "text_completion"
     """
 
-    text_completion = 'text_completion'
+    text_completion = "text_completion"
 
 
 class Type(Enum):
@@ -203,7 +206,7 @@ class Type(Enum):
     The type of the content part.
     """
 
-    image_url = 'image_url'
+    image_url = "image_url"
 
 
 class Detail(Enum):
@@ -211,29 +214,29 @@ class Detail(Enum):
     Specifies the detail level of the image. Learn more in the [Vision guide](/docs/guides/vision/low-or-high-fidelity-image-understanding).
     """
 
-    auto = 'auto'
-    low = 'low'
-    high = 'high'
+    auto = "auto"
+    low = "low"
+    high = "high"
 
 
 class ImageUrl(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     url: AnyUrl = Field(
-        ..., description='Either a URL of the image or the base64 encoded image data.'
+        ..., description="Either a URL of the image or the base64 encoded image data."
     )
     detail: Optional[Detail] = Field(
-        'auto',
-        description='Specifies the detail level of the image. Learn more in the [Vision guide](/docs/guides/vision/low-or-high-fidelity-image-understanding).',
+        "auto",
+        description="Specifies the detail level of the image. Learn more in the [Vision guide](/docs/guides/vision/low-or-high-fidelity-image-understanding).",
     )
 
 
 class ChatCompletionRequestMessageContentPartImage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type = Field(..., description='The type of the content part.')
+    type: Type = Field(..., description="The type of the content part.")
     image_url: ImageUrl
 
 
@@ -242,15 +245,15 @@ class Type1(Enum):
     The type of the content part.
     """
 
-    text = 'text'
+    text = "text"
 
 
 class ChatCompletionRequestMessageContentPartText(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type1 = Field(..., description='The type of the content part.')
-    text: str = Field(..., description='The text content.')
+    type: Type1 = Field(..., description="The type of the content part.")
+    text: str = Field(..., description="The text content.")
 
 
 class Role(Enum):
@@ -258,20 +261,20 @@ class Role(Enum):
     The role of the messages author, in this case `system`.
     """
 
-    system = 'system'
+    system = "system"
 
 
 class ChatCompletionRequestSystemMessage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    content: SecretStr = Field(..., description='The contents of the system message.')
+    content: SecretStr = Field(..., description="The contents of the system message.")
     role: Role = Field(
-        ..., description='The role of the messages author, in this case `system`.'
+        ..., description="The role of the messages author, in this case `system`."
     )
     name: Optional[str] = Field(
         None,
-        description='An optional name for the participant. Provides the model information to differentiate between participants of the same role.',
+        description="An optional name for the participant. Provides the model information to differentiate between participants of the same role.",
     )
 
 
@@ -280,7 +283,7 @@ class Role1(Enum):
     The role of the messages author, in this case `user`.
     """
 
-    user = 'user'
+    user = "user"
 
 
 class Role2(Enum):
@@ -288,7 +291,7 @@ class Role2(Enum):
     The role of the messages author, in this case `assistant`.
     """
 
-    assistant = 'assistant'
+    assistant = "assistant"
 
 
 class FunctionCall(BaseModel):
@@ -297,13 +300,13 @@ class FunctionCall(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     arguments: str = Field(
         ...,
-        description='The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.',
+        description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
-    name: str = Field(..., description='The name of the function to call.')
+    name: str = Field(..., description="The name of the function to call.")
 
 
 class Role3(Enum):
@@ -311,19 +314,19 @@ class Role3(Enum):
     The role of the messages author, in this case `tool`.
     """
 
-    tool = 'tool'
+    tool = "tool"
 
 
 class ChatCompletionRequestToolMessage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     role: Role3 = Field(
-        ..., description='The role of the messages author, in this case `tool`.'
+        ..., description="The role of the messages author, in this case `tool`."
     )
-    content: SecretStr = Field(..., description='The contents of the tool message.')
+    content: SecretStr = Field(..., description="The contents of the tool message.")
     tool_call_id: str = Field(
-        ..., description='Tool call that this message is responding to.'
+        ..., description="Tool call that this message is responding to."
     )
 
 
@@ -332,21 +335,21 @@ class Role4(Enum):
     The role of the messages author, in this case `function`.
     """
 
-    function = 'function'
+    function = "function"
 
 
 class ChatCompletionRequestFunctionMessage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     role: Role4 = Field(
-        ..., description='The role of the messages author, in this case `function`.'
+        ..., description="The role of the messages author, in this case `function`."
     )
     arguments: str = Field(
         ...,
-        description='The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.',
+        description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
-    name: Optional[str] = Field(None, description='The name of the function to call.')
+    name: Optional[str] = Field(None, description="The name of the function to call.")
 
 
 class FunctionParameters(BaseModel):
@@ -357,21 +360,21 @@ class FunctionParameters(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
 
 
 class ChatCompletionFunctions(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     description: Optional[str] = Field(
         None,
-        description='A description of what the function does, used by the model to choose when and how to call the function.',
+        description="A description of what the function does, used by the model to choose when and how to call the function.",
     )
     name: str = Field(
         ...,
-        description='The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.',
+        description="The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.",
     )
     parameters: FunctionParameters
 
@@ -383,9 +386,9 @@ class ChatCompletionFunctionCallOption(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: str = Field(..., description='The name of the function to call.')
+    name: str = Field(..., description="The name of the function to call.")
 
 
 class Type2(Enum):
@@ -393,20 +396,20 @@ class Type2(Enum):
     The type of the tool. Currently, only `function` is supported.
     """
 
-    function = 'function'
+    function = "function"
 
 
 class FunctionObject(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     description: Optional[str] = Field(
         None,
-        description='A description of what the function does, used by the model to choose when and how to call the function.',
+        description="A description of what the function does, used by the model to choose when and how to call the function.",
     )
     name: str = Field(
         ...,
-        description='The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.',
+        description="The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.",
     )
     parameters: FunctionParameters
 
@@ -417,15 +420,15 @@ class ChatCompletionToolChoiceOption1(Enum):
 
     """
 
-    none = 'none'
-    auto = 'auto'
+    none = "none"
+    auto = "auto"
 
 
 class Function(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: str = Field(..., description='The name of the function to call.')
+    name: str = Field(..., description="The name of the function to call.")
 
 
 class ChatCompletionNamedToolChoice(BaseModel):
@@ -434,11 +437,11 @@ class ChatCompletionNamedToolChoice(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     type: Optional[Type2] = Field(
         None,
-        description='The type of the tool. Currently, only `function` is supported.',
+        description="The type of the tool. Currently, only `function` is supported.",
     )
     function: Optional[Function] = None
 
@@ -449,47 +452,47 @@ class Function1(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: str = Field(..., description='The name of the function to call.')
+    name: str = Field(..., description="The name of the function to call.")
     arguments: str = Field(
         ...,
-        description='The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.',
+        description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
 
 
 class ChatCompletionMessageToolCall(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='The ID of the tool call.')
+    id: str = Field(..., description="The ID of the tool call.")
     type: Type2 = Field(
         ...,
-        description='The type of the tool. Currently, only `function` is supported.',
+        description="The type of the tool. Currently, only `function` is supported.",
     )
-    function: Function1 = Field(..., description='The function that the model called.')
+    function: Function1 = Field(..., description="The function that the model called.")
 
 
 class Function2(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: Optional[str] = Field(None, description='The name of the function to call.')
+    name: Optional[str] = Field(None, description="The name of the function to call.")
     arguments: Optional[str] = Field(
         None,
-        description='The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.',
+        description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
 
 
 class ChatCompletionMessageToolCallChunk(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     index: int
-    id: Optional[str] = Field(None, description='The ID of the tool call.')
+    id: Optional[str] = Field(None, description="The ID of the tool call.")
     type: Optional[Type2] = Field(
         None,
-        description='The type of the tool. Currently, only `function` is supported.',
+        description="The type of the tool. Currently, only `function` is supported.",
     )
     function: Optional[Function2] = None
 
@@ -499,11 +502,11 @@ class ChatCompletionRole(Enum):
     The role of the author of a message
     """
 
-    system = 'system'
-    user = 'user'
-    assistant = 'assistant'
-    tool = 'tool'
-    function = 'function'
+    system = "system"
+    user = "user"
+    assistant = "assistant"
+    tool = "tool"
+    function = "function"
 
 
 class Role5(Enum):
@@ -511,7 +514,7 @@ class Role5(Enum):
     The role of the author of this message.
     """
 
-    assistant = 'assistant'
+    assistant = "assistant"
 
 
 class FunctionCall2(BaseModel):
@@ -520,13 +523,13 @@ class FunctionCall2(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     arguments: Optional[str] = Field(
         None,
-        description='The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.',
+        description="The arguments to call the function with, as generated by the model in JSON format. Note that the model does not always generate valid JSON, and may hallucinate parameters not defined by your function schema. Validate the arguments in your code before calling your function.",
     )
-    name: Optional[str] = Field(None, description='The name of the function to call.')
+    name: Optional[str] = Field(None, description="The name of the function to call.")
 
 
 class Role6(Enum):
@@ -534,10 +537,10 @@ class Role6(Enum):
     The role of the author of this message.
     """
 
-    system = 'system'
-    user = 'user'
-    assistant = 'assistant'
-    tool = 'tool'
+    system = "system"
+    user = "user"
+    assistant = "assistant"
+    tool = "tool"
 
 
 class ChatCompletionStreamResponseDelta(BaseModel):
@@ -546,18 +549,18 @@ class ChatCompletionStreamResponseDelta(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     content: Optional[SecretStr] = Field(
-        None, description='The contents of the chunk message.'
+        None, description="The contents of the chunk message."
     )
     function_call: Optional[FunctionCall2] = Field(
         None,
-        description='Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.',
+        description="Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.",
     )
     tool_calls: Optional[List[ChatCompletionMessageToolCallChunk]] = None
     role: Optional[Role6] = Field(
-        None, description='The role of the author of this message.'
+        None, description="The role of the author of this message."
     )
 
 
@@ -566,20 +569,20 @@ class Model2(Enum):
     ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility) table for details on which models work with the Chat API.
     """
 
-    gpt_4_1106_preview = 'gpt-4-1106-preview'
-    gpt_4_vision_preview = 'gpt-4-vision-preview'
-    gpt_4 = 'gpt-4'
-    gpt_4_0314 = 'gpt-4-0314'
-    gpt_4_0613 = 'gpt-4-0613'
-    gpt_4_32k = 'gpt-4-32k'
-    gpt_4_32k_0314 = 'gpt-4-32k-0314'
-    gpt_4_32k_0613 = 'gpt-4-32k-0613'
-    gpt_3_5_turbo = 'gpt-3.5-turbo'
-    gpt_3_5_turbo_16k = 'gpt-3.5-turbo-16k'
-    gpt_3_5_turbo_0301 = 'gpt-3.5-turbo-0301'
-    gpt_3_5_turbo_0613 = 'gpt-3.5-turbo-0613'
-    gpt_3_5_turbo_1106 = 'gpt-3.5-turbo-1106'
-    gpt_3_5_turbo_16k_0613 = 'gpt-3.5-turbo-16k-0613'
+    gpt_4_1106_preview = "gpt-4-1106-preview"
+    gpt_4_vision_preview = "gpt-4-vision-preview"
+    gpt_4 = "gpt-4"
+    gpt_4_0314 = "gpt-4-0314"
+    gpt_4_0613 = "gpt-4-0613"
+    gpt_4_32k = "gpt-4-32k"
+    gpt_4_32k_0314 = "gpt-4-32k-0314"
+    gpt_4_32k_0613 = "gpt-4-32k-0613"
+    gpt_3_5_turbo = "gpt-3.5-turbo"
+    gpt_3_5_turbo_16k = "gpt-3.5-turbo-16k"
+    gpt_3_5_turbo_0301 = "gpt-3.5-turbo-0301"
+    gpt_3_5_turbo_0613 = "gpt-3.5-turbo-0613"
+    gpt_3_5_turbo_1106 = "gpt-3.5-turbo-1106"
+    gpt_3_5_turbo_16k_0613 = "gpt-3.5-turbo-16k-0613"
 
 
 class Type6(Enum):
@@ -587,8 +590,8 @@ class Type6(Enum):
     Must be one of `text` or `json_object`.
     """
 
-    text = 'text'
-    json_object = 'json_object'
+    text = "text"
+    json_object = "json_object"
 
 
 class ResponseFormat(BaseModel):
@@ -602,12 +605,12 @@ class ResponseFormat(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     type: Optional[Type6] = Field(
-        'text',
-        description='Must be one of `text` or `json_object`.',
-        examples=['json_object'],
+        "text",
+        description="Must be one of `text` or `json_object`.",
+        examples=["json_object"],
     )
 
 
@@ -617,8 +620,8 @@ class FunctionCall3(Enum):
 
     """
 
-    none = 'none'
-    auto = 'auto'
+    none = "none"
+    auto = "auto"
 
 
 class FinishReason1(Enum):
@@ -630,11 +633,11 @@ class FinishReason1(Enum):
 
     """
 
-    stop = 'stop'
-    length = 'length'
-    tool_calls = 'tool_calls'
-    content_filter = 'content_filter'
-    function_call = 'function_call'
+    stop = "stop"
+    length = "length"
+    tool_calls = "tool_calls"
+    content_filter = "content_filter"
+    function_call = "function_call"
 
 
 class Object2(Enum):
@@ -642,7 +645,7 @@ class Object2(Enum):
     The object type, which is always `chat.completion`.
     """
 
-    chat_completion = 'chat.completion'
+    chat_completion = "chat.completion"
 
 
 class FinishReason2(Enum):
@@ -651,14 +654,14 @@ class FinishReason2(Enum):
 
     """
 
-    stop = 'stop'
-    length = 'length'
-    function_call = 'function_call'
-    content_filter = 'content_filter'
+    stop = "stop"
+    length = "length"
+    function_call = "function_call"
+    content_filter = "content_filter"
 
 
 class Object4(Enum):
-    list = 'list'
+    list = "list"
 
 
 class FinishReason3(Enum):
@@ -670,24 +673,24 @@ class FinishReason3(Enum):
 
     """
 
-    stop = 'stop'
-    length = 'length'
-    tool_calls = 'tool_calls'
-    content_filter = 'content_filter'
-    function_call = 'function_call'
+    stop = "stop"
+    length = "length"
+    tool_calls = "tool_calls"
+    content_filter = "content_filter"
+    function_call = "function_call"
 
 
 class Choice3(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     delta: ChatCompletionStreamResponseDelta
     finish_reason: FinishReason3 = Field(
         ...,
-        description='The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n',
+        description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n",
     )
     index: int = Field(
-        ..., description='The index of the choice in the list of choices.'
+        ..., description="The index of the choice in the list of choices."
     )
 
 
@@ -696,7 +699,7 @@ class Object5(Enum):
     The object type, which is always `chat.completion.chunk`.
     """
 
-    chat_completion_chunk = 'chat.completion.chunk'
+    chat_completion_chunk = "chat.completion.chunk"
 
 
 class CreateChatCompletionStreamResponse(BaseModel):
@@ -705,27 +708,27 @@ class CreateChatCompletionStreamResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='A unique identifier for the chat completion. Each chunk has the same ID.',
+        description="A unique identifier for the chat completion. Each chunk has the same ID.",
     )
     choices: List[Choice3] = Field(
         ...,
-        description='A list of chat completion choices. Can be more than one if `n` is greater than 1.',
+        description="A list of chat completion choices. Can be more than one if `n` is greater than 1.",
     )
     created: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp.',
+        description="The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp.",
     )
-    model: str = Field(..., description='The model to generate the completion.')
+    model: str = Field(..., description="The model to generate the completion.")
     system_fingerprint: Optional[str] = Field(
         None,
-        description='This fingerprint represents the backend configuration that the model runs with.\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n',
+        description="This fingerprint represents the backend configuration that the model runs with.\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
     object: Object5 = Field(
-        ..., description='The object type, which is always `chat.completion.chunk`.'
+        ..., description="The object type, which is always `chat.completion.chunk`."
     )
 
 
@@ -735,7 +738,7 @@ class CreateChatCompletionImageResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
 
 
@@ -744,42 +747,42 @@ class Model3(Enum):
     ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.
     """
 
-    text_davinci_edit_001 = 'text-davinci-edit-001'
-    code_davinci_edit_001 = 'code-davinci-edit-001'
+    text_davinci_edit_001 = "text-davinci-edit-001"
+    code_davinci_edit_001 = "code-davinci-edit-001"
 
 
 class CreateEditRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     instruction: str = Field(
         ...,
-        description='The instruction that tells the model how to edit the prompt.',
-        examples=['Fix the spelling mistakes.'],
+        description="The instruction that tells the model how to edit the prompt.",
+        examples=["Fix the spelling mistakes."],
     )
     model: Union[str, Model3] = Field(
         ...,
-        description='ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.',
-        examples=['text-davinci-edit-001'],
+        description="ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.",
+        examples=["text-davinci-edit-001"],
     )
     input: Optional[str] = Field(
-        '',
-        description='The input text to use as a starting point for the edit.',
-        examples=['What day of the wek is it?'],
+        "",
+        description="The input text to use as a starting point for the edit.",
+        examples=["What day of the wek is it?"],
     )
     n: Optional[conint(ge=1, le=20)] = Field(
         1,
-        description='How many edits to generate for the input and instruction.',
+        description="How many edits to generate for the input and instruction.",
         examples=[1],
     )
     temperature: Optional[confloat(ge=0.0, le=2.0)] = Field(
         1,
-        description='What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n',
+        description="What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n",
         examples=[1],
     )
     top_p: Optional[confloat(ge=0.0, le=1.0)] = Field(
         1,
-        description='An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n',
+        description="An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n",
         examples=[1],
     )
 
@@ -792,22 +795,22 @@ class FinishReason4(Enum):
 
     """
 
-    stop = 'stop'
-    length = 'length'
+    stop = "stop"
+    length = "length"
 
 
 class Choice4(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     finish_reason: FinishReason4 = Field(
         ...,
-        description='The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n',
+        description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\nor `content_filter` if content was omitted due to a flag from our content filters.\n",
     )
     index: int = Field(
-        ..., description='The index of the choice in the list of choices.'
+        ..., description="The index of the choice in the list of choices."
     )
-    text: str = Field(..., description='The edited result.')
+    text: str = Field(..., description="The edited result.")
 
 
 class Object6(Enum):
@@ -815,7 +818,7 @@ class Object6(Enum):
     The object type, which is always `edit`.
     """
 
-    edit = 'edit'
+    edit = "edit"
 
 
 class Model4(Enum):
@@ -823,8 +826,8 @@ class Model4(Enum):
     The model to use for image generation.
     """
 
-    dall_e_2 = 'dall-e-2'
-    dall_e_3 = 'dall-e-3'
+    dall_e_2 = "dall-e-2"
+    dall_e_3 = "dall-e-3"
 
 
 class Quality(Enum):
@@ -832,8 +835,8 @@ class Quality(Enum):
     The quality of the image that will be generated. `hd` creates images with finer details and greater consistency across the image. This param is only supported for `dall-e-3`.
     """
 
-    standard = 'standard'
-    hd = 'hd'
+    standard = "standard"
+    hd = "hd"
 
 
 class ResponseFormat1(Enum):
@@ -841,8 +844,8 @@ class ResponseFormat1(Enum):
     The format in which the generated images are returned. Must be one of `url` or `b64_json`.
     """
 
-    url = 'url'
-    b64_json = 'b64_json'
+    url = "url"
+    b64_json = "b64_json"
 
 
 class Size(Enum):
@@ -850,11 +853,11 @@ class Size(Enum):
     The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`. Must be one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3` models.
     """
 
-    field_256x256 = '256x256'
-    field_512x512 = '512x512'
-    field_1024x1024 = '1024x1024'
-    field_1792x1024 = '1792x1024'
-    field_1024x1792 = '1024x1792'
+    field_256x256 = "256x256"
+    field_512x512 = "512x512"
+    field_1024x1024 = "1024x1024"
+    field_1792x1024 = "1792x1024"
+    field_1024x1792 = "1024x1792"
 
 
 class Style(Enum):
@@ -862,53 +865,53 @@ class Style(Enum):
     The style of the generated images. Must be one of `vivid` or `natural`. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images. This param is only supported for `dall-e-3`.
     """
 
-    vivid = 'vivid'
-    natural = 'natural'
+    vivid = "vivid"
+    natural = "natural"
 
 
 class CreateImageRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     prompt: str = Field(
         ...,
-        description='A text description of the desired image(s). The maximum length is 1000 characters for `dall-e-2` and 4000 characters for `dall-e-3`.',
-        examples=['A cute baby sea otter'],
+        description="A text description of the desired image(s). The maximum length is 1000 characters for `dall-e-2` and 4000 characters for `dall-e-3`.",
+        examples=["A cute baby sea otter"],
     )
     model: Optional[Union[str, Model4]] = Field(
-        'dall-e-2',
-        description='The model to use for image generation.',
-        examples=['dall-e-3'],
+        "dall-e-2",
+        description="The model to use for image generation.",
+        examples=["dall-e-3"],
     )
     n: Optional[conint(ge=1, le=10)] = Field(
         1,
-        description='The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.',
+        description="The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.",
         examples=[1],
     )
     quality: Optional[Quality] = Field(
-        'standard',
-        description='The quality of the image that will be generated. `hd` creates images with finer details and greater consistency across the image. This param is only supported for `dall-e-3`.',
-        examples=['standard'],
+        "standard",
+        description="The quality of the image that will be generated. `hd` creates images with finer details and greater consistency across the image. This param is only supported for `dall-e-3`.",
+        examples=["standard"],
     )
     response_format: Optional[ResponseFormat1] = Field(
-        'url',
-        description='The format in which the generated images are returned. Must be one of `url` or `b64_json`.',
-        examples=['url'],
+        "url",
+        description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
+        examples=["url"],
     )
     size: Optional[Size] = Field(
-        '1024x1024',
-        description='The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`. Must be one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3` models.',
-        examples=['1024x1024'],
+        "1024x1024",
+        description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`. Must be one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3` models.",
+        examples=["1024x1024"],
     )
     style: Optional[Style] = Field(
-        'vivid',
-        description='The style of the generated images. Must be one of `vivid` or `natural`. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images. This param is only supported for `dall-e-3`.',
-        examples=['vivid'],
+        "vivid",
+        description="The style of the generated images. Must be one of `vivid` or `natural`. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images. This param is only supported for `dall-e-3`.",
+        examples=["vivid"],
     )
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
 
 
@@ -918,19 +921,19 @@ class Image(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     b64_json: Optional[str] = Field(
         None,
-        description='The base64-encoded JSON of the generated image, if `response_format` is `b64_json`.',
+        description="The base64-encoded JSON of the generated image, if `response_format` is `b64_json`.",
     )
     url: Optional[str] = Field(
         None,
-        description='The URL of the generated image, if `response_format` is `url` (default).',
+        description="The URL of the generated image, if `response_format` is `url` (default).",
     )
     revised_prompt: Optional[str] = Field(
         None,
-        description='The prompt that was used to generate the image, if there was any revision to the prompt.',
+        description="The prompt that was used to generate the image, if there was any revision to the prompt.",
     )
 
 
@@ -939,7 +942,7 @@ class Model5(Enum):
     The model to use for image generation. Only `dall-e-2` is supported at this time.
     """
 
-    dall_e_2 = 'dall-e-2'
+    dall_e_2 = "dall-e-2"
 
 
 class Size1(Enum):
@@ -947,87 +950,87 @@ class Size1(Enum):
     The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
     """
 
-    field_256x256 = '256x256'
-    field_512x512 = '512x512'
-    field_1024x1024 = '1024x1024'
+    field_256x256 = "256x256"
+    field_512x512 = "512x512"
+    field_1024x1024 = "1024x1024"
 
 
 class CreateImageEditRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     image: bytes = Field(
         ...,
-        description='The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.',
+        description="The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.",
     )
     prompt: str = Field(
         ...,
-        description='A text description of the desired image(s). The maximum length is 1000 characters.',
-        examples=['A cute baby sea otter wearing a beret'],
+        description="A text description of the desired image(s). The maximum length is 1000 characters.",
+        examples=["A cute baby sea otter wearing a beret"],
     )
     mask: Optional[bytes] = Field(
         None,
-        description='An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where `image` should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as `image`.',
+        description="An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where `image` should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as `image`.",
     )
     model: Optional[Union[str, Model5]] = Field(
-        'dall-e-2',
-        description='The model to use for image generation. Only `dall-e-2` is supported at this time.',
-        examples=['dall-e-2'],
+        "dall-e-2",
+        description="The model to use for image generation. Only `dall-e-2` is supported at this time.",
+        examples=["dall-e-2"],
     )
     n: Optional[conint(ge=1, le=10)] = Field(
         1,
-        description='The number of images to generate. Must be between 1 and 10.',
+        description="The number of images to generate. Must be between 1 and 10.",
         examples=[1],
     )
     size: Optional[Size1] = Field(
-        '1024x1024',
-        description='The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.',
-        examples=['1024x1024'],
+        "1024x1024",
+        description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.",
+        examples=["1024x1024"],
     )
     response_format: Optional[ResponseFormat1] = Field(
-        'url',
-        description='The format in which the generated images are returned. Must be one of `url` or `b64_json`.',
-        examples=['url'],
+        "url",
+        description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
+        examples=["url"],
     )
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
 
 
 class CreateImageVariationRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     image: bytes = Field(
         ...,
-        description='The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.',
+        description="The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.",
     )
     model: Optional[Union[str, Model5]] = Field(
-        'dall-e-2',
-        description='The model to use for image generation. Only `dall-e-2` is supported at this time.',
-        examples=['dall-e-2'],
+        "dall-e-2",
+        description="The model to use for image generation. Only `dall-e-2` is supported at this time.",
+        examples=["dall-e-2"],
     )
     n: Optional[conint(ge=1, le=10)] = Field(
         1,
-        description='The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.',
+        description="The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is supported.",
         examples=[1],
     )
     response_format: Optional[ResponseFormat1] = Field(
-        'url',
-        description='The format in which the generated images are returned. Must be one of `url` or `b64_json`.',
-        examples=['url'],
+        "url",
+        description="The format in which the generated images are returned. Must be one of `url` or `b64_json`.",
+        examples=["url"],
     )
     size: Optional[Size1] = Field(
-        '1024x1024',
-        description='The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.',
-        examples=['1024x1024'],
+        "1024x1024",
+        description="The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.",
+        examples=["1024x1024"],
     )
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
 
 
@@ -1039,19 +1042,19 @@ class Model7(Enum):
 
     """
 
-    text_moderation_latest = 'text-moderation-latest'
-    text_moderation_stable = 'text-moderation-stable'
+    text_moderation_latest = "text-moderation-latest"
+    text_moderation_stable = "text-moderation-stable"
 
 
 class CreateModerationRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    input: Union[str, List[str]] = Field(..., description='The input text to classify')
+    input: Union[str, List[str]] = Field(..., description="The input text to classify")
     model: Optional[Union[str, Model7]] = Field(
-        'text-moderation-latest',
-        description='Two content moderations models are available: `text-moderation-stable` and `text-moderation-latest`.\n\nThe default is `text-moderation-latest` which will be automatically upgraded over time. This ensures you are always using our most accurate model. If you use `text-moderation-stable`, we will provide advanced notice before updating the model. Accuracy of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.\n',
-        examples=['text-moderation-stable'],
+        "text-moderation-latest",
+        description="Two content moderations models are available: `text-moderation-stable` and `text-moderation-latest`.\n\nThe default is `text-moderation-latest` which will be automatically upgraded over time. This ensures you are always using our most accurate model. If you use `text-moderation-stable`, we will provide advanced notice before updating the model. Accuracy of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.\n",
+        examples=["text-moderation-stable"],
     )
 
 
@@ -1061,57 +1064,57 @@ class Categories(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     hate: bool = Field(
         ...,
-        description='Content that expresses, incites, or promotes hate based on race, gender, ethnicity, religion, nationality, sexual orientation, disability status, or caste. Hateful content aimed at non-protected groups (e.g., chess players) is harrassment.',
+        description="Content that expresses, incites, or promotes hate based on race, gender, ethnicity, religion, nationality, sexual orientation, disability status, or caste. Hateful content aimed at non-protected groups (e.g., chess players) is harrassment.",
     )
     hate_threatening: bool = Field(
         ...,
-        alias='hate/threatening',
-        description='Hateful content that also includes violence or serious harm towards the targeted group based on race, gender, ethnicity, religion, nationality, sexual orientation, disability status, or caste.',
+        alias="hate/threatening",
+        description="Hateful content that also includes violence or serious harm towards the targeted group based on race, gender, ethnicity, religion, nationality, sexual orientation, disability status, or caste.",
     )
     harassment: bool = Field(
         ...,
-        description='Content that expresses, incites, or promotes harassing language towards any target.',
+        description="Content that expresses, incites, or promotes harassing language towards any target.",
     )
     harassment_threatening: bool = Field(
         ...,
-        alias='harassment/threatening',
-        description='Harassment content that also includes violence or serious harm towards any target.',
+        alias="harassment/threatening",
+        description="Harassment content that also includes violence or serious harm towards any target.",
     )
     self_harm: bool = Field(
         ...,
-        alias='self-harm',
-        description='Content that promotes, encourages, or depicts acts of self-harm, such as suicide, cutting, and eating disorders.',
+        alias="self-harm",
+        description="Content that promotes, encourages, or depicts acts of self-harm, such as suicide, cutting, and eating disorders.",
     )
     self_harm_intent: bool = Field(
         ...,
-        alias='self-harm/intent',
-        description='Content where the speaker expresses that they are engaging or intend to engage in acts of self-harm, such as suicide, cutting, and eating disorders.',
+        alias="self-harm/intent",
+        description="Content where the speaker expresses that they are engaging or intend to engage in acts of self-harm, such as suicide, cutting, and eating disorders.",
     )
     self_harm_instructions: bool = Field(
         ...,
-        alias='self-harm/instructions',
-        description='Content that encourages performing acts of self-harm, such as suicide, cutting, and eating disorders, or that gives instructions or advice on how to commit such acts.',
+        alias="self-harm/instructions",
+        description="Content that encourages performing acts of self-harm, such as suicide, cutting, and eating disorders, or that gives instructions or advice on how to commit such acts.",
     )
     sexual: bool = Field(
         ...,
-        description='Content meant to arouse sexual excitement, such as the description of sexual activity, or that promotes sexual services (excluding sex education and wellness).',
+        description="Content meant to arouse sexual excitement, such as the description of sexual activity, or that promotes sexual services (excluding sex education and wellness).",
     )
     sexual_minors: bool = Field(
         ...,
-        alias='sexual/minors',
-        description='Sexual content that includes an individual who is under 18 years old.',
+        alias="sexual/minors",
+        description="Sexual content that includes an individual who is under 18 years old.",
     )
     violence: bool = Field(
-        ..., description='Content that depicts death, violence, or physical injury.'
+        ..., description="Content that depicts death, violence, or physical injury."
     )
     violence_graphic: bool = Field(
         ...,
-        alias='violence/graphic',
-        description='Content that depicts death, violence, or physical injury in graphic detail.',
+        alias="violence/graphic",
+        description="Content that depicts death, violence, or physical injury in graphic detail.",
     )
 
 
@@ -1121,12 +1124,12 @@ class CategoryScores(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     hate: float = Field(..., description="The score for the category 'hate'.")
     hate_threatening: float = Field(
         ...,
-        alias='hate/threatening',
+        alias="hate/threatening",
         description="The score for the category 'hate/threatening'.",
     )
     harassment: float = Field(
@@ -1134,39 +1137,39 @@ class CategoryScores(BaseModel):
     )
     harassment_threatening: float = Field(
         ...,
-        alias='harassment/threatening',
+        alias="harassment/threatening",
         description="The score for the category 'harassment/threatening'.",
     )
     self_harm: float = Field(
-        ..., alias='self-harm', description="The score for the category 'self-harm'."
+        ..., alias="self-harm", description="The score for the category 'self-harm'."
     )
     self_harm_intent: float = Field(
         ...,
-        alias='self-harm/intent',
+        alias="self-harm/intent",
         description="The score for the category 'self-harm/intent'.",
     )
     self_harm_instructions: float = Field(
         ...,
-        alias='self-harm/instructions',
+        alias="self-harm/instructions",
         description="The score for the category 'self-harm/instructions'.",
     )
     sexual: float = Field(..., description="The score for the category 'sexual'.")
     sexual_minors: float = Field(
         ...,
-        alias='sexual/minors',
+        alias="sexual/minors",
         description="The score for the category 'sexual/minors'.",
     )
     violence: float = Field(..., description="The score for the category 'violence'.")
     violence_graphic: float = Field(
         ...,
-        alias='violence/graphic',
+        alias="violence/graphic",
         description="The score for the category 'violence/graphic'.",
     )
 
 
 class Result(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     flagged: bool = Field(
         ...,
@@ -1174,11 +1177,11 @@ class Result(BaseModel):
     )
     categories: Categories = Field(
         ...,
-        description='A list of the categories, and whether they are flagged or not.',
+        description="A list of the categories, and whether they are flagged or not.",
     )
     category_scores: CategoryScores = Field(
         ...,
-        description='A list of the categories along with their scores as predicted by model.',
+        description="A list of the categories along with their scores as predicted by model.",
     )
 
 
@@ -1188,19 +1191,19 @@ class CreateModerationResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The unique identifier for the moderation request.'
+        ..., description="The unique identifier for the moderation request."
     )
     model: str = Field(
-        ..., description='The model used to generate the moderation results.'
+        ..., description="The model used to generate the moderation results."
     )
-    results: List[Result] = Field(..., description='A list of moderation objects.')
+    results: List[Result] = Field(..., description="A list of moderation objects.")
 
 
 class Object7(Enum):
-    list = 'list'
+    list = "list"
 
 
 class Purpose(Enum):
@@ -1211,16 +1214,16 @@ class Purpose(Enum):
 
     """
 
-    fine_tune = 'fine-tune'
-    assistants = 'assistants'
+    fine_tune = "fine-tune"
+    assistants = "assistants"
 
 
 class CreateFileRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file: bytes = Field(
-        ..., description='The File object (not file name) to be uploaded.\n'
+        ..., description="The File object (not file name) to be uploaded.\n"
     )
     purpose: Purpose = Field(
         ...,
@@ -1229,12 +1232,12 @@ class CreateFileRequest(BaseModel):
 
 
 class Object8(Enum):
-    file = 'file'
+    file = "file"
 
 
 class DeleteFileResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     object: Object8
@@ -1248,9 +1251,9 @@ class Model8(Enum):
 
     """
 
-    babbage_002 = 'babbage-002'
-    davinci_002 = 'davinci-002'
-    gpt_3_5_turbo = 'gpt-3.5-turbo'
+    babbage_002 = "babbage-002"
+    davinci_002 = "davinci-002"
+    gpt_3_5_turbo = "gpt-3.5-turbo"
 
 
 class BatchSize(Enum):
@@ -1260,7 +1263,7 @@ class BatchSize(Enum):
 
     """
 
-    auto = 'auto'
+    auto = "auto"
 
 
 class LearningRateMultiplier(Enum):
@@ -1270,7 +1273,7 @@ class LearningRateMultiplier(Enum):
 
     """
 
-    auto = 'auto'
+    auto = "auto"
 
 
 class NEpochs(Enum):
@@ -1280,7 +1283,7 @@ class NEpochs(Enum):
 
     """
 
-    auto = 'auto'
+    auto = "auto"
 
 
 class Hyperparameters(BaseModel):
@@ -1289,40 +1292,40 @@ class Hyperparameters(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     batch_size: Optional[Union[BatchSize, conint(ge=1, le=256)]] = Field(
-        'auto',
-        description='Number of examples in each batch. A larger batch size means that model parameters\nare updated less frequently, but with lower variance.\n',
+        "auto",
+        description="Number of examples in each batch. A larger batch size means that model parameters\nare updated less frequently, but with lower variance.\n",
     )
     learning_rate_multiplier: Optional[
         Union[LearningRateMultiplier, PositiveFloat]
     ] = Field(
-        'auto',
-        description='Scaling factor for the learning rate. A smaller learning rate may be useful to avoid\noverfitting.\n',
+        "auto",
+        description="Scaling factor for the learning rate. A smaller learning rate may be useful to avoid\noverfitting.\n",
     )
     n_epochs: Optional[Union[NEpochs, conint(ge=1, le=50)]] = Field(
-        'auto',
-        description='The number of epochs to train the model for. An epoch refers to one full cycle \nthrough the training dataset.\n',
+        "auto",
+        description="The number of epochs to train the model for. An epoch refers to one full cycle \nthrough the training dataset.\n",
     )
 
 
 class CreateFineTuningJobRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     model: Union[str, Model8] = Field(
         ...,
-        description='The name of the model to fine-tune. You can select one of the\n[supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).\n',
-        examples=['gpt-3.5-turbo'],
+        description="The name of the model to fine-tune. You can select one of the\n[supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).\n",
+        examples=["gpt-3.5-turbo"],
     )
     training_file: str = Field(
         ...,
-        description='The ID of an uploaded file that contains training data.\n\nSee [upload file](/docs/api-reference/files/upload) for how to upload a file.\n\nYour dataset must be formatted as a JSONL file. Additionally, you must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/fine-tuning) for more details.\n',
-        examples=['file-abc123'],
+        description="The ID of an uploaded file that contains training data.\n\nSee [upload file](/docs/api-reference/files/upload) for how to upload a file.\n\nYour dataset must be formatted as a JSONL file. Additionally, you must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/fine-tuning) for more details.\n",
+        examples=["file-abc123"],
     )
     hyperparameters: Optional[Hyperparameters] = Field(
-        None, description='The hyperparameters used for the fine-tuning job.'
+        None, description="The hyperparameters used for the fine-tuning job."
     )
     suffix: Optional[constr(min_length=1, max_length=40)] = Field(
         None,
@@ -1330,13 +1333,13 @@ class CreateFineTuningJobRequest(BaseModel):
     )
     validation_file: Optional[str] = Field(
         None,
-        description='The ID of an uploaded file that contains validation data.\n\nIf you provide this file, the data is used to generate validation\nmetrics periodically during fine-tuning. These metrics can be viewed in\nthe fine-tuning results file.\nThe same data should not be present in both train and validation files.\n\nYour dataset must be formatted as a JSONL file. You must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/fine-tuning) for more details.\n',
-        examples=['file-abc123'],
+        description="The ID of an uploaded file that contains validation data.\n\nIf you provide this file, the data is used to generate validation\nmetrics periodically during fine-tuning. These metrics can be viewed in\nthe fine-tuning results file.\nThe same data should not be present in both train and validation files.\n\nYour dataset must be formatted as a JSONL file. You must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/fine-tuning) for more details.\n",
+        examples=["file-abc123"],
     )
 
 
 class Object9(Enum):
-    list = 'list'
+    list = "list"
 
 
 class NEpochs1(Enum):
@@ -1346,7 +1349,7 @@ class NEpochs1(Enum):
 
     """
 
-    auto = 'auto'
+    auto = "auto"
 
 
 class Hyperparameters1(BaseModel):
@@ -1355,11 +1358,11 @@ class Hyperparameters1(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     n_epochs: Optional[Union[NEpochs1, conint(ge=1, le=50)]] = Field(
-        'auto',
-        description='The number of epochs to train the model for. An epoch refers to one\nfull cycle through the training dataset.\n',
+        "auto",
+        description="The number of epochs to train the model for. An epoch refers to one\nfull cycle through the training dataset.\n",
     )
 
 
@@ -1372,20 +1375,20 @@ class Model9(Enum):
 
     """
 
-    ada = 'ada'
-    babbage = 'babbage'
-    curie = 'curie'
-    davinci = 'davinci'
+    ada = "ada"
+    babbage = "babbage"
+    curie = "curie"
+    davinci = "davinci"
 
 
 class CreateFineTuneRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     training_file: str = Field(
         ...,
         description='The ID of an uploaded file that contains training data.\n\nSee [upload file](/docs/api-reference/files/upload) for how to upload a file.\n\nYour dataset must be formatted as a JSONL file, where each training\nexample is a JSON object with the keys "prompt" and "completion".\nAdditionally, you must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/legacy-fine-tuning/creating-training-data) for more details.\n',
-        examples=['file-abc123'],
+        examples=["file-abc123"],
     )
     batch_size: Optional[int] = Field(
         None,
@@ -1393,36 +1396,36 @@ class CreateFineTuneRequest(BaseModel):
     )
     classification_betas: Optional[List[float]] = Field(
         None,
-        description='If this is provided, we calculate F-beta scores at the specified\nbeta values. The F-beta score is a generalization of F-1 score.\nThis is only used for binary classification.\n\nWith a beta of 1 (i.e. the F-1 score), precision and recall are\ngiven the same weight. A larger beta score puts more weight on\nrecall and less on precision. A smaller beta score puts more weight\non precision and less on recall.\n',
+        description="If this is provided, we calculate F-beta scores at the specified\nbeta values. The F-beta score is a generalization of F-1 score.\nThis is only used for binary classification.\n\nWith a beta of 1 (i.e. the F-1 score), precision and recall are\ngiven the same weight. A larger beta score puts more weight on\nrecall and less on precision. A smaller beta score puts more weight\non precision and less on recall.\n",
         examples=[[0.6, 1, 1.5, 2]],
     )
     classification_n_classes: Optional[int] = Field(
         None,
-        description='The number of classes in a classification task.\n\nThis parameter is required for multiclass classification.\n',
+        description="The number of classes in a classification task.\n\nThis parameter is required for multiclass classification.\n",
     )
     classification_positive_class: Optional[str] = Field(
         None,
-        description='The positive class in binary classification.\n\nThis parameter is needed to generate precision, recall, and F1\nmetrics when doing binary classification.\n',
+        description="The positive class in binary classification.\n\nThis parameter is needed to generate precision, recall, and F1\nmetrics when doing binary classification.\n",
     )
     compute_classification_metrics: Optional[bool] = Field(
         False,
-        description='If set, we calculate classification-specific metrics such as accuracy\nand F-1 score using the validation set at the end of every epoch.\nThese metrics can be viewed in the [results file](/docs/guides/legacy-fine-tuning/analyzing-your-fine-tuned-model).\n\nIn order to compute classification metrics, you must provide a\n`validation_file`. Additionally, you must\nspecify `classification_n_classes` for multiclass classification or\n`classification_positive_class` for binary classification.\n',
+        description="If set, we calculate classification-specific metrics such as accuracy\nand F-1 score using the validation set at the end of every epoch.\nThese metrics can be viewed in the [results file](/docs/guides/legacy-fine-tuning/analyzing-your-fine-tuned-model).\n\nIn order to compute classification metrics, you must provide a\n`validation_file`. Additionally, you must\nspecify `classification_n_classes` for multiclass classification or\n`classification_positive_class` for binary classification.\n",
     )
     hyperparameters: Optional[Hyperparameters1] = Field(
-        None, description='The hyperparameters used for the fine-tuning job.'
+        None, description="The hyperparameters used for the fine-tuning job."
     )
     learning_rate_multiplier: Optional[float] = Field(
         None,
-        description='The learning rate multiplier to use for training.\nThe fine-tuning learning rate is the original learning rate used for\npretraining multiplied by this value.\n\nBy default, the learning rate multiplier is the 0.05, 0.1, or 0.2\ndepending on final `batch_size` (larger learning rates tend to\nperform better with larger batch sizes). We recommend experimenting\nwith values in the range 0.02 to 0.2 to see what produces the best\nresults.\n',
+        description="The learning rate multiplier to use for training.\nThe fine-tuning learning rate is the original learning rate used for\npretraining multiplied by this value.\n\nBy default, the learning rate multiplier is the 0.05, 0.1, or 0.2\ndepending on final `batch_size` (larger learning rates tend to\nperform better with larger batch sizes). We recommend experimenting\nwith values in the range 0.02 to 0.2 to see what produces the best\nresults.\n",
     )
     model: Optional[Union[str, Model9]] = Field(
-        'curie',
+        "curie",
         description='The name of the base model to fine-tune. You can select one of "ada",\n"babbage", "curie", "davinci", or a fine-tuned model created after 2022-04-21 and before 2023-08-22.\nTo learn more about these models, see the\n[Models](/docs/models) documentation.\n',
-        examples=['curie'],
+        examples=["curie"],
     )
     prompt_loss_weight: Optional[float] = Field(
         0.01,
-        description='The weight to use for loss on the prompt tokens. This controls how\nmuch the model tries to learn to generate the prompt (as compared\nto the completion which always has a weight of 1.0), and can add\na stabilizing effect to training when completions are short.\n\nIf prompts are extremely long (relative to completions), it may make\nsense to reduce this weight so as to avoid over-prioritizing\nlearning the prompt.\n',
+        description="The weight to use for loss on the prompt tokens. This controls how\nmuch the model tries to learn to generate the prompt (as compared\nto the completion which always has a weight of 1.0), and can add\na stabilizing effect to training when completions are short.\n\nIf prompts are extremely long (relative to completions), it may make\nsense to reduce this weight so as to avoid over-prioritizing\nlearning the prompt.\n",
     )
     suffix: Optional[constr(min_length=1, max_length=40)] = Field(
         None,
@@ -1431,7 +1434,7 @@ class CreateFineTuneRequest(BaseModel):
     validation_file: Optional[str] = Field(
         None,
         description='The ID of an uploaded file that contains validation data.\n\nIf you provide this file, the data is used to generate validation\nmetrics periodically during fine-tuning. These metrics can be viewed in\nthe [fine-tuning results file](/docs/guides/legacy-fine-tuning/analyzing-your-fine-tuned-model).\nYour train and validation data should be mutually exclusive.\n\nYour dataset must be formatted as a JSONL file, where each validation\nexample is a JSON object with the keys "prompt" and "completion".\nAdditionally, you must upload your file with the purpose `fine-tune`.\n\nSee the [fine-tuning guide](/docs/guides/legacy-fine-tuning/creating-training-data) for more details.\n',
-        examples=['file-abc123'],
+        examples=["file-abc123"],
     )
 
 
@@ -1445,7 +1448,7 @@ class Model10(Enum):
 
     """
 
-    text_embedding_ada_002 = 'text-embedding-ada-002'
+    text_embedding_ada_002 = "text-embedding-ada-002"
 
 
 class EncodingFormat(Enum):
@@ -1453,33 +1456,33 @@ class EncodingFormat(Enum):
     The format to return the embeddings in. Can be either `float` or [`base64`](https://pypi.org/project/pybase64/).
     """
 
-    float = 'float'
-    base64 = 'base64'
+    float = "float"
+    base64 = "base64"
 
 
 class CreateEmbeddingRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     input: Union[str, List[str], List[int], List[InputItem]] = Field(
         ...,
-        description='Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for `text-embedding-ada-002`), cannot be an empty string, and any array must be 2048 dimensions or less. [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken) for counting tokens.\n',
-        examples=['The quick brown fox jumped over the lazy dog'],
+        description="Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for `text-embedding-ada-002`), cannot be an empty string, and any array must be 2048 dimensions or less. [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken) for counting tokens.\n",
+        examples=["The quick brown fox jumped over the lazy dog"],
     )
     model: Union[str, Model10] = Field(
         ...,
-        description='ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n',
-        examples=['text-embedding-ada-002'],
+        description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
+        examples=["text-embedding-ada-002"],
     )
     encoding_format: Optional[EncodingFormat] = Field(
-        'float',
-        description='The format to return the embeddings in. Can be either `float` or [`base64`](https://pypi.org/project/pybase64/).',
-        examples=['float'],
+        "float",
+        description="The format to return the embeddings in. Can be either `float` or [`base64`](https://pypi.org/project/pybase64/).",
+        examples=["float"],
     )
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
 
 
@@ -1488,7 +1491,7 @@ class Object12(Enum):
     The object type, which is always "list".
     """
 
-    list = 'list'
+    list = "list"
 
 
 class Usage(BaseModel):
@@ -1497,13 +1500,13 @@ class Usage(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     prompt_tokens: int = Field(
-        ..., description='The number of tokens used by the prompt.'
+        ..., description="The number of tokens used by the prompt."
     )
     total_tokens: int = Field(
-        ..., description='The total number of tokens used by the request.'
+        ..., description="The total number of tokens used by the request."
     )
 
 
@@ -1513,7 +1516,7 @@ class Model11(Enum):
 
     """
 
-    whisper_1 = 'whisper-1'
+    whisper_1 = "whisper-1"
 
 
 class ResponseFormat4(Enum):
@@ -1522,81 +1525,81 @@ class ResponseFormat4(Enum):
 
     """
 
-    json = 'json'
-    text = 'text'
-    srt = 'srt'
-    verbose_json = 'verbose_json'
-    vtt = 'vtt'
+    json = "json"
+    text = "text"
+    srt = "srt"
+    verbose_json = "verbose_json"
+    vtt = "vtt"
 
 
 class CreateTranscriptionRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file: bytes = Field(
         ...,
-        description='The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n',
+        description="The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n",
     )
     model: Union[str, Model11] = Field(
         ...,
-        description='ID of the model to use. Only `whisper-1` is currently available.\n',
-        examples=['whisper-1'],
+        description="ID of the model to use. Only `whisper-1` is currently available.\n",
+        examples=["whisper-1"],
     )
     language: Optional[str] = Field(
         None,
-        description='The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.\n',
+        description="The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.\n",
     )
     prompt: Optional[str] = Field(
         None,
         description="An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.\n",
     )
     response_format: Optional[ResponseFormat4] = Field(
-        'json',
-        description='The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.\n',
+        "json",
+        description="The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.\n",
     )
     temperature: Optional[float] = Field(
         0,
-        description='The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.\n',
+        description="The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.\n",
     )
 
 
 class CreateTranscriptionResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     text: str
 
 
 class CreateTranslationRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file: bytes = Field(
         ...,
-        description='The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n',
+        description="The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.\n",
     )
     model: Union[str, Model11] = Field(
         ...,
-        description='ID of the model to use. Only `whisper-1` is currently available.\n',
-        examples=['whisper-1'],
+        description="ID of the model to use. Only `whisper-1` is currently available.\n",
+        examples=["whisper-1"],
     )
     prompt: Optional[str] = Field(
         None,
         description="An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.\n",
     )
     response_format: Optional[str] = Field(
-        'json',
-        description='The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.\n',
+        "json",
+        description="The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.\n",
     )
     temperature: Optional[float] = Field(
         0,
-        description='The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.\n',
+        description="The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.\n",
     )
 
 
 class CreateTranslationResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     text: str
 
@@ -1607,8 +1610,8 @@ class Model13(Enum):
 
     """
 
-    tts_1 = 'tts-1'
-    tts_1_hd = 'tts-1-hd'
+    tts_1 = "tts-1"
+    tts_1_hd = "tts-1-hd"
 
 
 class Voice(Enum):
@@ -1616,12 +1619,12 @@ class Voice(Enum):
     The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the [Text to speech guide](/docs/guides/text-to-speech/voice-options).
     """
 
-    alloy = 'alloy'
-    echo = 'echo'
-    fable = 'fable'
-    onyx = 'onyx'
-    nova = 'nova'
-    shimmer = 'shimmer'
+    alloy = "alloy"
+    echo = "echo"
+    fable = "fable"
+    onyx = "onyx"
+    nova = "nova"
+    shimmer = "shimmer"
 
 
 class ResponseFormat5(Enum):
@@ -1629,35 +1632,35 @@ class ResponseFormat5(Enum):
     The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`.
     """
 
-    mp3 = 'mp3'
-    opus = 'opus'
-    aac = 'aac'
-    flac = 'flac'
+    mp3 = "mp3"
+    opus = "opus"
+    aac = "aac"
+    flac = "flac"
 
 
 class CreateSpeechRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     model: Union[str, Model13] = Field(
         ...,
-        description='One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd`\n',
+        description="One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd`\n",
     )
     input: constr(max_length=4096) = Field(
         ...,
-        description='The text to generate audio for. The maximum length is 4096 characters.',
+        description="The text to generate audio for. The maximum length is 4096 characters.",
     )
     voice: Voice = Field(
         ...,
-        description='The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the [Text to speech guide](/docs/guides/text-to-speech/voice-options).',
+        description="The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the [Text to speech guide](/docs/guides/text-to-speech/voice-options).",
     )
     response_format: Optional[ResponseFormat5] = Field(
-        'mp3',
-        description='The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`.',
+        "mp3",
+        description="The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`.",
     )
     speed: Optional[confloat(ge=0.25, le=4.0)] = Field(
         1,
-        description='The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.',
+        description="The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.",
     )
 
 
@@ -1666,7 +1669,7 @@ class Object13(Enum):
     The object type, which is always "model".
     """
 
-    model = 'model'
+    model = "model"
 
 
 class Model(BaseModel):
@@ -1675,19 +1678,19 @@ class Model(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The model identifier, which can be referenced in the API endpoints.',
+        description="The model identifier, which can be referenced in the API endpoints.",
     )
     created: int = Field(
-        ..., description='The Unix timestamp (in seconds) when the model was created.'
+        ..., description="The Unix timestamp (in seconds) when the model was created."
     )
     object: Object13 = Field(
         ..., description='The object type, which is always "model".'
     )
-    owned_by: str = Field(..., description='The organization that owns the model.')
+    owned_by: str = Field(..., description="The organization that owns the model.")
 
 
 class Object14(Enum):
@@ -1695,7 +1698,7 @@ class Object14(Enum):
     The object type, which is always `file`.
     """
 
-    file = 'file'
+    file = "file"
 
 
 class Purpose1(Enum):
@@ -1703,10 +1706,10 @@ class Purpose1(Enum):
     The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`, `assistants`, and `assistants_output`.
     """
 
-    fine_tune = 'fine-tune'
-    fine_tune_results = 'fine-tune-results'
-    assistants = 'assistants'
-    assistants_output = 'assistants_output'
+    fine_tune = "fine-tune"
+    fine_tune_results = "fine-tune-results"
+    assistants = "assistants"
+    assistants_output = "assistants_output"
 
 
 class Status(Enum):
@@ -1714,9 +1717,9 @@ class Status(Enum):
     Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or `error`.
     """
 
-    uploaded = 'uploaded'
-    processed = 'processed'
-    error = 'error'
+    uploaded = "uploaded"
+    processed = "processed"
+    error = "error"
 
 
 class OpenAIFile(BaseModel):
@@ -1725,32 +1728,32 @@ class OpenAIFile(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The file identifier, which can be referenced in the API endpoints.',
+        description="The file identifier, which can be referenced in the API endpoints.",
     )
-    bytes: int = Field(..., description='The size of the file, in bytes.')
+    bytes: int = Field(..., description="The size of the file, in bytes.")
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the file was created.',
+        description="The Unix timestamp (in seconds) for when the file was created.",
     )
-    filename: str = Field(..., description='The name of the file.')
+    filename: str = Field(..., description="The name of the file.")
     object: Object14 = Field(
-        ..., description='The object type, which is always `file`.'
+        ..., description="The object type, which is always `file`."
     )
     purpose: Purpose1 = Field(
         ...,
-        description='The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`, `assistants`, and `assistants_output`.',
+        description="The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`, `assistants`, and `assistants_output`.",
     )
     status: Status = Field(
         ...,
-        description='Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or `error`.',
+        description="Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or `error`.",
     )
     status_details: Optional[str] = Field(
         None,
-        description='Deprecated. For details on why a fine-tuning training file failed validation, see the `error` field on `fine_tuning.job`.',
+        description="Deprecated. For details on why a fine-tuning training file failed validation, see the `error` field on `fine_tuning.job`.",
     )
 
 
@@ -1759,7 +1762,7 @@ class Object15(Enum):
     The object type, which is always "embedding".
     """
 
-    embedding = 'embedding'
+    embedding = "embedding"
 
 
 class Embedding(BaseModel):
@@ -1769,14 +1772,14 @@ class Embedding(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     index: int = Field(
-        ..., description='The index of the embedding in the list of embeddings.'
+        ..., description="The index of the embedding in the list of embeddings."
     )
     embedding: List[float] = Field(
         ...,
-        description='The embedding vector, which is a list of floats. The length of vector depends on the model as listed in the [embedding guide](/docs/guides/embeddings).\n',
+        description="The embedding vector, which is a list of floats. The length of vector depends on the model as listed in the [embedding guide](/docs/guides/embeddings).\n",
     )
     object: Object15 = Field(
         ..., description='The object type, which is always "embedding".'
@@ -1789,13 +1792,13 @@ class Error1(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    code: str = Field(..., description='A machine-readable error code.')
-    message: str = Field(..., description='A human-readable error message.')
+    code: str = Field(..., description="A machine-readable error code.")
+    message: str = Field(..., description="A human-readable error message.")
     param: str = Field(
         ...,
-        description='The parameter that was invalid, usually `training_file` or `validation_file`. This field will be null if the failure was not parameter-specific.',
+        description="The parameter that was invalid, usually `training_file` or `validation_file`. This field will be null if the failure was not parameter-specific.",
     )
 
 
@@ -1805,7 +1808,7 @@ class NEpochs2(Enum):
     "auto" decides the optimal number of epochs based on the size of the dataset. If setting the number manually, we support any number between 1 and 50 epochs.
     """
 
-    auto = 'auto'
+    auto = "auto"
 
 
 class Hyperparameters2(BaseModel):
@@ -1814,7 +1817,7 @@ class Hyperparameters2(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     n_epochs: Union[NEpochs2, conint(ge=1, le=50)] = Field(
         ...,
@@ -1827,7 +1830,7 @@ class Object16(Enum):
     The object type, which is always "fine_tuning.job".
     """
 
-    fine_tuning_job = 'fine_tuning.job'
+    fine_tuning_job = "fine_tuning.job"
 
 
 class Status1(Enum):
@@ -1835,12 +1838,12 @@ class Status1(Enum):
     The current status of the fine-tuning job, which can be either `validating_files`, `queued`, `running`, `succeeded`, `failed`, or `cancelled`.
     """
 
-    validating_files = 'validating_files'
-    queued = 'queued'
-    running = 'running'
-    succeeded = 'succeeded'
-    failed = 'failed'
-    cancelled = 'cancelled'
+    validating_files = "validating_files"
+    queued = "queued"
+    running = "running"
+    succeeded = "succeeded"
+    failed = "failed"
+    cancelled = "cancelled"
 
 
 class FineTuningJob(BaseModel):
@@ -1850,69 +1853,69 @@ class FineTuningJob(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The object identifier, which can be referenced in the API endpoints.',
+        description="The object identifier, which can be referenced in the API endpoints.",
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the fine-tuning job was created.',
+        description="The Unix timestamp (in seconds) for when the fine-tuning job was created.",
     )
     error: Error1 = Field(
         ...,
-        description='For fine-tuning jobs that have `failed`, this will contain more information on the cause of the failure.',
+        description="For fine-tuning jobs that have `failed`, this will contain more information on the cause of the failure.",
     )
     fine_tuned_model: str = Field(
         ...,
-        description='The name of the fine-tuned model that is being created. The value will be null if the fine-tuning job is still running.',
+        description="The name of the fine-tuned model that is being created. The value will be null if the fine-tuning job is still running.",
     )
     finished_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the fine-tuning job was finished. The value will be null if the fine-tuning job is still running.',
+        description="The Unix timestamp (in seconds) for when the fine-tuning job was finished. The value will be null if the fine-tuning job is still running.",
     )
     hyperparameters: Hyperparameters2 = Field(
         ...,
-        description='The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.',
+        description="The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.",
     )
-    model: str = Field(..., description='The base model that is being fine-tuned.')
+    model: str = Field(..., description="The base model that is being fine-tuned.")
     object: Object16 = Field(
         ..., description='The object type, which is always "fine_tuning.job".'
     )
     organization_id: str = Field(
-        ..., description='The organization that owns the fine-tuning job.'
+        ..., description="The organization that owns the fine-tuning job."
     )
     result_files: List[str] = Field(
         ...,
-        description='The compiled results file ID(s) for the fine-tuning job. You can retrieve the results with the [Files API](/docs/api-reference/files/retrieve-contents).',
+        description="The compiled results file ID(s) for the fine-tuning job. You can retrieve the results with the [Files API](/docs/api-reference/files/retrieve-contents).",
     )
     status: Status1 = Field(
         ...,
-        description='The current status of the fine-tuning job, which can be either `validating_files`, `queued`, `running`, `succeeded`, `failed`, or `cancelled`.',
+        description="The current status of the fine-tuning job, which can be either `validating_files`, `queued`, `running`, `succeeded`, `failed`, or `cancelled`.",
     )
     trained_tokens: int = Field(
         ...,
-        description='The total number of billable tokens processed by this fine-tuning job. The value will be null if the fine-tuning job is still running.',
+        description="The total number of billable tokens processed by this fine-tuning job. The value will be null if the fine-tuning job is still running.",
     )
     training_file: str = Field(
         ...,
-        description='The file ID used for training. You can retrieve the training data with the [Files API](/docs/api-reference/files/retrieve-contents).',
+        description="The file ID used for training. You can retrieve the training data with the [Files API](/docs/api-reference/files/retrieve-contents).",
     )
     validation_file: str = Field(
         ...,
-        description='The file ID used for validation. You can retrieve the validation results with the [Files API](/docs/api-reference/files/retrieve-contents).',
+        description="The file ID used for validation. You can retrieve the validation results with the [Files API](/docs/api-reference/files/retrieve-contents).",
     )
 
 
 class Level(Enum):
-    info = 'info'
-    warn = 'warn'
-    error = 'error'
+    info = "info"
+    warn = "warn"
+    error = "error"
 
 
 class Object17(Enum):
-    fine_tuning_job_event = 'fine_tuning.job.event'
+    fine_tuning_job_event = "fine_tuning.job.event"
 
 
 class FineTuningJobEvent(BaseModel):
@@ -1921,7 +1924,7 @@ class FineTuningJobEvent(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     created_at: int
@@ -1936,33 +1939,33 @@ class Hyperparams(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     batch_size: int = Field(
         ...,
-        description='The batch size to use for training. The batch size is the number of\ntraining examples used to train a single forward and backward pass.\n',
+        description="The batch size to use for training. The batch size is the number of\ntraining examples used to train a single forward and backward pass.\n",
     )
     classification_n_classes: Optional[int] = Field(
         None,
-        description='The number of classes to use for computing classification metrics.\n',
+        description="The number of classes to use for computing classification metrics.\n",
     )
     classification_positive_class: Optional[str] = Field(
         None,
-        description='The positive class to use for computing classification metrics.\n',
+        description="The positive class to use for computing classification metrics.\n",
     )
     compute_classification_metrics: Optional[bool] = Field(
         None,
-        description='The classification metrics to compute using the validation dataset at the end of every epoch.\n',
+        description="The classification metrics to compute using the validation dataset at the end of every epoch.\n",
     )
     learning_rate_multiplier: float = Field(
-        ..., description='The learning rate multiplier to use for training.\n'
+        ..., description="The learning rate multiplier to use for training.\n"
     )
     n_epochs: int = Field(
         ...,
-        description='The number of epochs to train the model for. An epoch refers to one\nfull cycle through the training dataset.\n',
+        description="The number of epochs to train the model for. An epoch refers to one\nfull cycle through the training dataset.\n",
     )
     prompt_loss_weight: float = Field(
-        ..., description='The weight to use for loss on the prompt tokens.\n'
+        ..., description="The weight to use for loss on the prompt tokens.\n"
     )
 
 
@@ -1971,11 +1974,11 @@ class Object18(Enum):
     The object type, which is always "fine-tune".
     """
 
-    fine_tune = 'fine-tune'
+    fine_tune = "fine-tune"
 
 
 class Object19(Enum):
-    fine_tune_event = 'fine-tune-event'
+    fine_tune_event = "fine-tune-event"
 
 
 class FineTuneEvent(BaseModel):
@@ -1984,7 +1987,7 @@ class FineTuneEvent(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     created_at: int
     level: str
@@ -1998,15 +2001,15 @@ class CompletionUsage(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     completion_tokens: int = Field(
-        ..., description='Number of tokens in the generated completion.'
+        ..., description="Number of tokens in the generated completion."
     )
-    prompt_tokens: int = Field(..., description='Number of tokens in the prompt.')
+    prompt_tokens: int = Field(..., description="Number of tokens in the prompt.")
     total_tokens: int = Field(
         ...,
-        description='Total number of tokens used in the request (prompt + completion).',
+        description="Total number of tokens used in the request (prompt + completion).",
     )
 
 
@@ -2015,16 +2018,16 @@ class Object20(Enum):
     The object type, which is always `assistant`.
     """
 
-    assistant = 'assistant'
+    assistant = "assistant"
 
 
 class Object21(Enum):
-    assistant_deleted = 'assistant.deleted'
+    assistant_deleted = "assistant.deleted"
 
 
 class DeleteAssistantResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     deleted: bool
@@ -2036,15 +2039,15 @@ class Type7(Enum):
     The type of tool being defined: `code_interpreter`
     """
 
-    code_interpreter = 'code_interpreter'
+    code_interpreter = "code_interpreter"
 
 
 class AssistantToolsCode(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     type: Type7 = Field(
-        ..., description='The type of tool being defined: `code_interpreter`'
+        ..., description="The type of tool being defined: `code_interpreter`"
     )
 
 
@@ -2053,14 +2056,14 @@ class Type8(Enum):
     The type of tool being defined: `retrieval`
     """
 
-    retrieval = 'retrieval'
+    retrieval = "retrieval"
 
 
 class AssistantToolsRetrieval(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type8 = Field(..., description='The type of tool being defined: `retrieval`')
+    type: Type8 = Field(..., description="The type of tool being defined: `retrieval`")
 
 
 class Type9(Enum):
@@ -2068,14 +2071,14 @@ class Type9(Enum):
     The type of tool being defined: `function`
     """
 
-    function = 'function'
+    function = "function"
 
 
 class AssistantToolsFunction(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type9 = Field(..., description='The type of tool being defined: `function`')
+    type: Type9 = Field(..., description="The type of tool being defined: `function`")
     function: FunctionObject
 
 
@@ -2084,7 +2087,7 @@ class Object22(Enum):
     The object type, which is always `thread.run`.
     """
 
-    thread_run = 'thread.run'
+    thread_run = "thread.run"
 
 
 class Status2(Enum):
@@ -2092,14 +2095,14 @@ class Status2(Enum):
     The status of the run, which can be either `queued`, `in_progress`, `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`, or `expired`.
     """
 
-    queued = 'queued'
-    in_progress = 'in_progress'
-    requires_action = 'requires_action'
-    cancelling = 'cancelling'
-    cancelled = 'cancelled'
-    failed = 'failed'
-    completed = 'completed'
-    expired = 'expired'
+    queued = "queued"
+    in_progress = "in_progress"
+    requires_action = "requires_action"
+    cancelling = "cancelling"
+    cancelled = "cancelled"
+    failed = "failed"
+    completed = "completed"
+    expired = "expired"
 
 
 class Type10(Enum):
@@ -2107,7 +2110,7 @@ class Type10(Enum):
     For now, this is always `submit_tool_outputs`.
     """
 
-    submit_tool_outputs = 'submit_tool_outputs'
+    submit_tool_outputs = "submit_tool_outputs"
 
 
 class Code(Enum):
@@ -2115,8 +2118,8 @@ class Code(Enum):
     One of `server_error` or `rate_limit_exceeded`.
     """
 
-    server_error = 'server_error'
-    rate_limit_exceeded = 'rate_limit_exceeded'
+    server_error = "server_error"
+    rate_limit_exceeded = "rate_limit_exceeded"
 
 
 class LastError(BaseModel):
@@ -2125,73 +2128,73 @@ class LastError(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     code: Code = Field(
-        ..., description='One of `server_error` or `rate_limit_exceeded`.'
+        ..., description="One of `server_error` or `rate_limit_exceeded`."
     )
-    message: str = Field(..., description='A human-readable description of the error.')
+    message: str = Field(..., description="A human-readable description of the error.")
 
 
 class CreateRunRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     assistant_id: str = Field(
         ...,
-        description='The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.',
+        description="The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.",
     )
     model: Optional[str] = Field(
         None,
-        description='The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.',
+        description="The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.",
     )
     instructions: Optional[str] = Field(
         None,
-        description='Override the default system message of the assistant. This is useful for modifying the behavior on a per-run basis.',
+        description="Override the default system message of the assistant. This is useful for modifying the behavior on a per-run basis.",
     )
     tools: Optional[
         List[Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]]
     ] = Field(
         None,
-        description='Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.',
+        description="Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.",
         max_length=20,
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ModifyRunRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ToolOutput(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     tool_call_id: Optional[str] = Field(
         None,
-        description='The ID of the tool call in the `required_action` object within the run object the output is being submitted for.',
+        description="The ID of the tool call in the `required_action` object within the run object the output is being submitted for.",
     )
     output: Optional[str] = Field(
         None,
-        description='The output of the tool call to be submitted to continue the run.',
+        description="The output of the tool call to be submitted to continue the run.",
     )
 
 
 class SubmitToolOutputsRunRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     tool_outputs: List[ToolOutput] = Field(
-        ..., description='A list of tools for which the outputs are being submitted.'
+        ..., description="A list of tools for which the outputs are being submitted."
     )
 
 
@@ -2200,7 +2203,7 @@ class Type11(Enum):
     The type of tool call the output is required for. For now, this is always `function`.
     """
 
-    function = 'function'
+    function = "function"
 
 
 class Function3(BaseModel):
@@ -2209,12 +2212,12 @@ class Function3(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: str = Field(..., description='The name of the function.')
+    name: str = Field(..., description="The name of the function.")
     arguments: str = Field(
         ...,
-        description='The arguments that the model expects you to pass to the function.',
+        description="The arguments that the model expects you to pass to the function.",
     )
 
 
@@ -2224,17 +2227,17 @@ class RunToolCallObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The ID of the tool call. This ID must be referenced when you submit the tool outputs in using the [Submit tool outputs to run](/docs/api-reference/runs/submitToolOutputs) endpoint.',
+        description="The ID of the tool call. This ID must be referenced when you submit the tool outputs in using the [Submit tool outputs to run](/docs/api-reference/runs/submitToolOutputs) endpoint.",
     )
     type: Type11 = Field(
         ...,
-        description='The type of tool call the output is required for. For now, this is always `function`.',
+        description="The type of tool call the output is required for. For now, this is always `function`.",
     )
-    function: Function3 = Field(..., description='The function definition.')
+    function: Function3 = Field(..., description="The function definition.")
 
 
 class Object23(Enum):
@@ -2242,7 +2245,7 @@ class Object23(Enum):
     The object type, which is always `thread`.
     """
 
-    thread = 'thread'
+    thread = "thread"
 
 
 class ThreadObject(BaseModel):
@@ -2251,41 +2254,41 @@ class ThreadObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object23 = Field(
-        ..., description='The object type, which is always `thread`.'
+        ..., description="The object type, which is always `thread`."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the thread was created.',
+        description="The Unix timestamp (in seconds) for when the thread was created.",
     )
     metadata: Dict[str, Any] = Field(
         ...,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ModifyThreadRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class Object24(Enum):
-    thread_deleted = 'thread.deleted'
+    thread_deleted = "thread.deleted"
 
 
 class DeleteThreadResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     deleted: bool
@@ -2294,12 +2297,12 @@ class DeleteThreadResponse(BaseModel):
 
 class ListThreadsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[ThreadObject]
-    first_id: str = Field(..., examples=['asst_abc123'])
-    last_id: str = Field(..., examples=['asst_abc456'])
+    first_id: str = Field(..., examples=["asst_abc123"])
+    last_id: str = Field(..., examples=["asst_abc456"])
     has_more: bool = Field(..., examples=[False])
 
 
@@ -2308,7 +2311,7 @@ class Object25(Enum):
     The object type, which is always `thread.message`.
     """
 
-    thread_message = 'thread.message'
+    thread_message = "thread.message"
 
 
 class Role7(Enum):
@@ -2316,8 +2319,8 @@ class Role7(Enum):
     The entity that produced the message. One of `user` or `assistant`.
     """
 
-    user = 'user'
-    assistant = 'assistant'
+    user = "user"
+    assistant = "assistant"
 
 
 class Role8(Enum):
@@ -2325,47 +2328,47 @@ class Role8(Enum):
     The role of the entity that is creating the message. Currently only `user` is supported.
     """
 
-    user = 'user'
+    user = "user"
 
 
 class CreateMessageRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     role: Role8 = Field(
         ...,
-        description='The role of the entity that is creating the message. Currently only `user` is supported.',
+        description="The role of the entity that is creating the message. Currently only `user` is supported.",
     )
-    content: SecretStr = Field(..., description='The content of the message.')
+    content: SecretStr = Field(..., description="The content of the message.")
     file_ids: Optional[List[str]] = Field(
         [],
-        description='A list of [File](/docs/api-reference/files) IDs that the message should use. There can be a maximum of 10 files attached to a message. Useful for tools like `retrieval` and `code_interpreter` that can access and use files.',
+        description="A list of [File](/docs/api-reference/files) IDs that the message should use. There can be a maximum of 10 files attached to a message. Useful for tools like `retrieval` and `code_interpreter` that can access and use files.",
         max_length=10,
         min_length=1,
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ModifyMessageRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class Object26(Enum):
-    thread_message_deleted = 'thread.message.deleted'
+    thread_message_deleted = "thread.message.deleted"
 
 
 class DeleteMessageResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     deleted: bool
@@ -2377,16 +2380,16 @@ class Type12(Enum):
     Always `image_file`.
     """
 
-    image_file = 'image_file'
+    image_file = "image_file"
 
 
 class ImageFile(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file_id: str = Field(
         ...,
-        description='The [File](/docs/api-reference/files) ID of the image in the message content.',
+        description="The [File](/docs/api-reference/files) ID of the image in the message content.",
     )
 
 
@@ -2396,9 +2399,9 @@ class MessageContentImageFileObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type12 = Field(..., description='Always `image_file`.')
+    type: Type12 = Field(..., description="Always `image_file`.")
     image_file: ImageFile
 
 
@@ -2407,7 +2410,7 @@ class Type13(Enum):
     Always `text`.
     """
 
-    text = 'text'
+    text = "text"
 
 
 class Type14(Enum):
@@ -2415,17 +2418,17 @@ class Type14(Enum):
     Always `file_citation`.
     """
 
-    file_citation = 'file_citation'
+    file_citation = "file_citation"
 
 
 class FileCitation(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file_id: str = Field(
-        ..., description='The ID of the specific File the citation is from.'
+        ..., description="The ID of the specific File the citation is from."
     )
-    quote: str = Field(..., description='The specific quote in the file.')
+    quote: str = Field(..., description="The specific quote in the file.")
 
 
 class MessageContentTextAnnotationsFileCitationObject(BaseModel):
@@ -2434,11 +2437,11 @@ class MessageContentTextAnnotationsFileCitationObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type14 = Field(..., description='Always `file_citation`.')
+    type: Type14 = Field(..., description="Always `file_citation`.")
     text: str = Field(
-        ..., description='The text in the message content that needs to be replaced.'
+        ..., description="The text in the message content that needs to be replaced."
     )
     file_citation: FileCitation
     start_index: conint(ge=0)
@@ -2450,14 +2453,14 @@ class Type15(Enum):
     Always `file_path`.
     """
 
-    file_path = 'file_path'
+    file_path = "file_path"
 
 
 class FilePath(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    file_id: str = Field(..., description='The ID of the file that was generated.')
+    file_id: str = Field(..., description="The ID of the file that was generated.")
 
 
 class MessageContentTextAnnotationsFilePathObject(BaseModel):
@@ -2466,11 +2469,11 @@ class MessageContentTextAnnotationsFilePathObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type15 = Field(..., description='Always `file_path`.')
+    type: Type15 = Field(..., description="Always `file_path`.")
     text: str = Field(
-        ..., description='The text in the message content that needs to be replaced.'
+        ..., description="The text in the message content that needs to be replaced."
     )
     file_path: FilePath
     start_index: conint(ge=0)
@@ -2482,7 +2485,7 @@ class Object27(Enum):
     The object type, which is always `thread.run.step``.
     """
 
-    thread_run_step = 'thread.run.step'
+    thread_run_step = "thread.run.step"
 
 
 class Type16(Enum):
@@ -2490,8 +2493,8 @@ class Type16(Enum):
     The type of run step, which can be either `message_creation` or `tool_calls`.
     """
 
-    message_creation = 'message_creation'
-    tool_calls = 'tool_calls'
+    message_creation = "message_creation"
+    tool_calls = "tool_calls"
 
 
 class Status3(Enum):
@@ -2499,11 +2502,11 @@ class Status3(Enum):
     The status of the run step, which can be either `in_progress`, `cancelled`, `failed`, `completed`, or `expired`.
     """
 
-    in_progress = 'in_progress'
-    cancelled = 'cancelled'
-    failed = 'failed'
-    completed = 'completed'
-    expired = 'expired'
+    in_progress = "in_progress"
+    cancelled = "cancelled"
+    failed = "failed"
+    completed = "completed"
+    expired = "expired"
 
 
 class LastError1(BaseModel):
@@ -2512,12 +2515,12 @@ class LastError1(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     code: Code = Field(
-        ..., description='One of `server_error` or `rate_limit_exceeded`.'
+        ..., description="One of `server_error` or `rate_limit_exceeded`."
     )
-    message: str = Field(..., description='A human-readable description of the error.')
+    message: str = Field(..., description="A human-readable description of the error.")
 
 
 class Type17(Enum):
@@ -2525,15 +2528,15 @@ class Type17(Enum):
     Always `message_creation``.
     """
 
-    message_creation = 'message_creation'
+    message_creation = "message_creation"
 
 
 class MessageCreation(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     message_id: str = Field(
-        ..., description='The ID of the message that was created by this run step.'
+        ..., description="The ID of the message that was created by this run step."
     )
 
 
@@ -2543,9 +2546,9 @@ class RunStepDetailsMessageCreationObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type17 = Field(..., description='Always `message_creation``.')
+    type: Type17 = Field(..., description="Always `message_creation``.")
     message_creation: MessageCreation
 
 
@@ -2554,7 +2557,7 @@ class Type18(Enum):
     Always `tool_calls`.
     """
 
-    tool_calls = 'tool_calls'
+    tool_calls = "tool_calls"
 
 
 class Type19(Enum):
@@ -2562,7 +2565,7 @@ class Type19(Enum):
     The type of tool call. This is always going to be `code_interpreter` for this type of tool call.
     """
 
-    code_interpreter = 'code_interpreter'
+    code_interpreter = "code_interpreter"
 
 
 class Type20(Enum):
@@ -2570,7 +2573,7 @@ class Type20(Enum):
     Always `logs`.
     """
 
-    logs = 'logs'
+    logs = "logs"
 
 
 class RunStepDetailsToolCallsCodeOutputLogsObject(BaseModel):
@@ -2579,11 +2582,11 @@ class RunStepDetailsToolCallsCodeOutputLogsObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type20 = Field(..., description='Always `logs`.')
+    type: Type20 = Field(..., description="Always `logs`.")
     logs: str = Field(
-        ..., description='The text output from the Code Interpreter tool call.'
+        ..., description="The text output from the Code Interpreter tool call."
     )
 
 
@@ -2592,23 +2595,23 @@ class Type21(Enum):
     Always `image`.
     """
 
-    image = 'image'
+    image = "image"
 
 
 class Image1(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file_id: str = Field(
-        ..., description='The [file](/docs/api-reference/files) ID of the image.'
+        ..., description="The [file](/docs/api-reference/files) ID of the image."
     )
 
 
 class RunStepDetailsToolCallsCodeOutputImageObject(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type21 = Field(..., description='Always `image`.')
+    type: Type21 = Field(..., description="Always `image`.")
     image: Image1
 
 
@@ -2617,20 +2620,20 @@ class Type22(Enum):
     The type of tool call. This is always going to be `retrieval` for this type of tool call.
     """
 
-    retrieval = 'retrieval'
+    retrieval = "retrieval"
 
 
 class RunStepDetailsToolCallsRetrievalObject(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='The ID of the tool call object.')
+    id: str = Field(..., description="The ID of the tool call object.")
     type: Type22 = Field(
         ...,
-        description='The type of tool call. This is always going to be `retrieval` for this type of tool call.',
+        description="The type of tool call. This is always going to be `retrieval` for this type of tool call.",
     )
     retrieval: Dict[str, Any] = Field(
-        ..., description='For now, this is always going to be an empty object.'
+        ..., description="For now, this is always going to be an empty object."
     )
 
 
@@ -2639,7 +2642,7 @@ class Type23(Enum):
     The type of tool call. This is always going to be `function` for this type of tool call.
     """
 
-    function = 'function'
+    function = "function"
 
 
 class Function4(BaseModel):
@@ -2648,27 +2651,27 @@ class Function4(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    name: str = Field(..., description='The name of the function.')
-    arguments: str = Field(..., description='The arguments passed to the function.')
+    name: str = Field(..., description="The name of the function.")
+    arguments: str = Field(..., description="The arguments passed to the function.")
     output: str = Field(
         ...,
-        description='The output of the function. This will be `null` if the outputs have not been [submitted](/docs/api-reference/runs/submitToolOutputs) yet.',
+        description="The output of the function. This will be `null` if the outputs have not been [submitted](/docs/api-reference/runs/submitToolOutputs) yet.",
     )
 
 
 class RunStepDetailsToolCallsFunctionObject(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='The ID of the tool call object.')
+    id: str = Field(..., description="The ID of the tool call object.")
     type: Type23 = Field(
         ...,
-        description='The type of tool call. This is always going to be `function` for this type of tool call.',
+        description="The type of tool call. This is always going to be `function` for this type of tool call.",
     )
     function: Function4 = Field(
-        ..., description='The definition of the function that was called.'
+        ..., description="The definition of the function that was called."
     )
 
 
@@ -2677,7 +2680,7 @@ class Object28(Enum):
     The object type, which is always `assistant.file`.
     """
 
-    assistant_file = 'assistant.file'
+    assistant_file = "assistant.file"
 
 
 class AssistantFileObject(BaseModel):
@@ -2686,26 +2689,26 @@ class AssistantFileObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object28 = Field(
-        ..., description='The object type, which is always `assistant.file`.'
+        ..., description="The object type, which is always `assistant.file`."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the assistant file was created.',
+        description="The Unix timestamp (in seconds) for when the assistant file was created.",
     )
     assistant_id: str = Field(
-        ..., description='The assistant ID that the file is attached to.'
+        ..., description="The assistant ID that the file is attached to."
     )
 
 
 class CreateAssistantFileRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     file_id: str = Field(
         ...,
@@ -2714,7 +2717,7 @@ class CreateAssistantFileRequest(BaseModel):
 
 
 class Object29(Enum):
-    assistant_file_deleted = 'assistant.file.deleted'
+    assistant_file_deleted = "assistant.file.deleted"
 
 
 class DeleteAssistantFileResponse(BaseModel):
@@ -2723,7 +2726,7 @@ class DeleteAssistantFileResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str
     deleted: bool
@@ -2732,12 +2735,12 @@ class DeleteAssistantFileResponse(BaseModel):
 
 class ListAssistantFilesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[AssistantFileObject]
-    first_id: str = Field(..., examples=['file-abc123'])
-    last_id: str = Field(..., examples=['file-abc456'])
+    first_id: str = Field(..., examples=["file-abc123"])
+    last_id: str = Field(..., examples=["file-abc456"])
     has_more: bool = Field(..., examples=[False])
 
 
@@ -2746,7 +2749,7 @@ class Object30(Enum):
     The object type, which is always `thread.message.file`.
     """
 
-    thread_message_file = 'thread.message.file'
+    thread_message_file = "thread.message.file"
 
 
 class MessageFileObject(BaseModel):
@@ -2755,38 +2758,38 @@ class MessageFileObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object30 = Field(
-        ..., description='The object type, which is always `thread.message.file`.'
+        ..., description="The object type, which is always `thread.message.file`."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the message file was created.',
+        description="The Unix timestamp (in seconds) for when the message file was created.",
     )
     message_id: str = Field(
         ...,
-        description='The ID of the [message](/docs/api-reference/messages) that the [File](/docs/api-reference/files) is attached to.',
+        description="The ID of the [message](/docs/api-reference/messages) that the [File](/docs/api-reference/files) is attached to.",
     )
 
 
 class ListMessageFilesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[MessageFileObject]
-    first_id: str = Field(..., examples=['file-abc123'])
-    last_id: str = Field(..., examples=['file-abc456'])
+    first_id: str = Field(..., examples=["file-abc123"])
+    last_id: str = Field(..., examples=["file-abc456"])
     has_more: bool = Field(..., examples=[False])
 
 
 class ListModelsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     object: Object
     data: List[Model]
@@ -2799,21 +2802,21 @@ class CreateCompletionResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='A unique identifier for the completion.')
+    id: str = Field(..., description="A unique identifier for the completion.")
     choices: List[Choice] = Field(
         ...,
-        description='The list of completion choices the model generated for the input prompt.',
+        description="The list of completion choices the model generated for the input prompt.",
     )
     created: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) of when the completion was created.',
+        description="The Unix timestamp (in seconds) of when the completion was created.",
     )
-    model: str = Field(..., description='The model used for completion.')
+    model: str = Field(..., description="The model used for completion.")
     system_fingerprint: Optional[str] = Field(
         None,
-        description='This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n',
+        description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
     object: Object1 = Field(
         ..., description='The object type, which is always "text_completion"'
@@ -2837,27 +2840,27 @@ class ChatCompletionRequestMessageContentPart(
 
 class ChatCompletionRequestUserMessage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     content: Union[SecretStr, List[ChatCompletionRequestMessageContentPart]] = Field(
-        ..., description='The contents of the user message.\n'
+        ..., description="The contents of the user message.\n"
     )
     role: Role1 = Field(
-        ..., description='The role of the messages author, in this case `user`.'
+        ..., description="The role of the messages author, in this case `user`."
     )
     name: Optional[str] = Field(
         None,
-        description='An optional name for the participant. Provides the model information to differentiate between participants of the same role.',
+        description="An optional name for the participant. Provides the model information to differentiate between participants of the same role.",
     )
 
 
 class ChatCompletionTool(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     type: Type2 = Field(
         ...,
-        description='The type of the tool. Currently, only `function` is supported.',
+        description="The type of the tool. Currently, only `function` is supported.",
     )
     function: FunctionObject
 
@@ -2878,7 +2881,7 @@ class ChatCompletionMessageToolCalls(RootModel[List[ChatCompletionMessageToolCal
 
     root: List[ChatCompletionMessageToolCall] = Field(
         ...,
-        description='The tool calls generated by the model, such as function calls.',
+        description="The tool calls generated by the model, such as function calls.",
     )
 
 
@@ -2888,27 +2891,27 @@ class ChatCompletionResponseMessage(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    content: SecretStr = Field(..., description='The contents of the message.')
+    content: SecretStr = Field(..., description="The contents of the message.")
     tool_calls: Optional[ChatCompletionMessageToolCalls] = None
-    role: Role5 = Field(..., description='The role of the author of this message.')
+    role: Role5 = Field(..., description="The role of the author of this message.")
     function_call: Optional[FunctionCall] = Field(
         None,
-        description='Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.',
+        description="Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.",
     )
 
 
 class Choice1(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     finish_reason: FinishReason1 = Field(
         ...,
-        description='The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n',
+        description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,\n`length` if the maximum number of tokens specified in the request was reached,\n`content_filter` if content was omitted due to a flag from our content filters,\n`tool_calls` if the model called a tool, or `function_call` (deprecated) if the model called a function.\n",
     )
     index: int = Field(
-        ..., description='The index of the choice in the list of choices.'
+        ..., description="The index of the choice in the list of choices."
     )
     message: ChatCompletionResponseMessage
 
@@ -2919,38 +2922,38 @@ class CreateChatCompletionResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='A unique identifier for the chat completion.')
+    id: str = Field(..., description="A unique identifier for the chat completion.")
     choices: List[Choice1] = Field(
         ...,
-        description='A list of chat completion choices. Can be more than one if `n` is greater than 1.',
+        description="A list of chat completion choices. Can be more than one if `n` is greater than 1.",
     )
     created: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) of when the chat completion was created.',
+        description="The Unix timestamp (in seconds) of when the chat completion was created.",
     )
-    model: str = Field(..., description='The model used for the chat completion.')
+    model: str = Field(..., description="The model used for the chat completion.")
     system_fingerprint: Optional[str] = Field(
         None,
-        description='This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n',
+        description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
     object: Object2 = Field(
-        ..., description='The object type, which is always `chat.completion`.'
+        ..., description="The object type, which is always `chat.completion`."
     )
     usage: Optional[CompletionUsage] = None
 
 
 class Choice2(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     finish_reason: FinishReason2 = Field(
         ...,
-        description='The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, or `function_call` if the model called a function.\n',
+        description="The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached, `content_filter` if content was omitted due to a flag from our content filters, or `function_call` if the model called a function.\n",
     )
     index: int = Field(
-        ..., description='The index of the choice in the list of choices.'
+        ..., description="The index of the choice in the list of choices."
     )
     message: ChatCompletionResponseMessage
 
@@ -2961,31 +2964,31 @@ class CreateChatCompletionFunctionResponse(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='A unique identifier for the chat completion.')
+    id: str = Field(..., description="A unique identifier for the chat completion.")
     choices: List[Choice2] = Field(
         ...,
-        description='A list of chat completion choices. Can be more than one if `n` is greater than 1.',
+        description="A list of chat completion choices. Can be more than one if `n` is greater than 1.",
     )
     created: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) of when the chat completion was created.',
+        description="The Unix timestamp (in seconds) of when the chat completion was created.",
     )
-    model: str = Field(..., description='The model used for the chat completion.')
+    model: str = Field(..., description="The model used for the chat completion.")
     system_fingerprint: Optional[str] = Field(
         None,
-        description='This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n',
+        description="This fingerprint represents the backend configuration that the model runs with.\n\nCan be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.\n",
     )
     object: Object2 = Field(
-        ..., description='The object type, which is always `chat.completion`.'
+        ..., description="The object type, which is always `chat.completion`."
     )
     usage: Optional[CompletionUsage] = None
 
 
 class ListPaginatedFineTuningJobsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[FineTuningJob]
     has_more: bool
@@ -2994,22 +2997,22 @@ class ListPaginatedFineTuningJobsResponse(BaseModel):
 
 class CreateEditResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     choices: List[Choice4] = Field(
         ...,
-        description='A list of edit choices. Can be more than one if `n` is greater than 1.',
+        description="A list of edit choices. Can be more than one if `n` is greater than 1.",
     )
-    object: Object6 = Field(..., description='The object type, which is always `edit`.')
+    object: Object6 = Field(..., description="The object type, which is always `edit`.")
     created: int = Field(
-        ..., description='The Unix timestamp (in seconds) of when the edit was created.'
+        ..., description="The Unix timestamp (in seconds) of when the edit was created."
     )
     usage: CompletionUsage
 
 
 class ImagesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     created: int
     data: List[Image]
@@ -3017,7 +3020,7 @@ class ImagesResponse(BaseModel):
 
 class ListFilesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[OpenAIFile]
     object: Object7
@@ -3025,7 +3028,7 @@ class ListFilesResponse(BaseModel):
 
 class ListFineTuningJobEventsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[FineTuningJobEvent]
     object: Object9
@@ -3033,7 +3036,7 @@ class ListFineTuningJobEventsResponse(BaseModel):
 
 class ListFineTuneEventsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[FineTuneEvent]
     object: Object9
@@ -3041,18 +3044,18 @@ class ListFineTuneEventsResponse(BaseModel):
 
 class CreateEmbeddingResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[Embedding] = Field(
-        ..., description='The list of embeddings generated by the model.'
+        ..., description="The list of embeddings generated by the model."
     )
     model: str = Field(
-        ..., description='The name of the model used to generate the embedding.'
+        ..., description="The name of the model used to generate the embedding."
     )
     object: Object12 = Field(
         ..., description='The object type, which is always "list".'
     )
-    usage: Usage = Field(..., description='The usage information for the request.')
+    usage: Usage = Field(..., description="The usage information for the request.")
 
 
 class FineTune(BaseModel):
@@ -3062,50 +3065,50 @@ class FineTune(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The object identifier, which can be referenced in the API endpoints.',
+        description="The object identifier, which can be referenced in the API endpoints.",
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the fine-tuning job was created.',
+        description="The Unix timestamp (in seconds) for when the fine-tuning job was created.",
     )
     events: Optional[List[FineTuneEvent]] = Field(
         None,
-        description='The list of events that have been observed in the lifecycle of the FineTune job.',
+        description="The list of events that have been observed in the lifecycle of the FineTune job.",
     )
     fine_tuned_model: str = Field(
-        ..., description='The name of the fine-tuned model that is being created.'
+        ..., description="The name of the fine-tuned model that is being created."
     )
     hyperparams: Hyperparams = Field(
         ...,
-        description='The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/legacy-fine-tuning/hyperparameters) for more details.',
+        description="The hyperparameters used for the fine-tuning job. See the [fine-tuning guide](/docs/guides/legacy-fine-tuning/hyperparameters) for more details.",
     )
-    model: str = Field(..., description='The base model that is being fine-tuned.')
+    model: str = Field(..., description="The base model that is being fine-tuned.")
     object: Object18 = Field(
         ..., description='The object type, which is always "fine-tune".'
     )
     organization_id: str = Field(
-        ..., description='The organization that owns the fine-tuning job.'
+        ..., description="The organization that owns the fine-tuning job."
     )
     result_files: List[OpenAIFile] = Field(
-        ..., description='The compiled results files for the fine-tuning job.'
+        ..., description="The compiled results files for the fine-tuning job."
     )
     status: str = Field(
         ...,
-        description='The current status of the fine-tuning job, which can be either `created`, `running`, `succeeded`, `failed`, or `cancelled`.',
+        description="The current status of the fine-tuning job, which can be either `created`, `running`, `succeeded`, `failed`, or `cancelled`.",
     )
     training_files: List[OpenAIFile] = Field(
-        ..., description='The list of files used for training.'
+        ..., description="The list of files used for training."
     )
     updated_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the fine-tuning job was last updated.',
+        description="The Unix timestamp (in seconds) for when the fine-tuning job was last updated.",
     )
     validation_files: List[OpenAIFile] = Field(
-        ..., description='The list of files used for validation.'
+        ..., description="The list of files used for validation."
     )
 
 
@@ -3115,136 +3118,136 @@ class AssistantObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object20 = Field(
-        ..., description='The object type, which is always `assistant`.'
+        ..., description="The object type, which is always `assistant`."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the assistant was created.',
+        description="The Unix timestamp (in seconds) for when the assistant was created.",
     )
     name: constr(max_length=256) = Field(
         ...,
-        description='The name of the assistant. The maximum length is 256 characters.\n',
+        description="The name of the assistant. The maximum length is 256 characters.\n",
     )
     description: constr(max_length=512) = Field(
         ...,
-        description='The description of the assistant. The maximum length is 512 characters.\n',
+        description="The description of the assistant. The maximum length is 512 characters.\n",
     )
     model: str = Field(
         ...,
-        description='ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n',
+        description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
     )
     instructions: constr(max_length=32768) = Field(
         ...,
-        description='The system instructions that the assistant uses. The maximum length is 32768 characters.\n',
+        description="The system instructions that the assistant uses. The maximum length is 32768 characters.\n",
     )
     tools: List[
         Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]
     ] = Field(
         ...,
-        description='A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n',
+        description="A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n",
         max_length=128,
     )
     file_ids: List[str] = Field(
         ...,
-        description='A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order.\n',
+        description="A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order.\n",
         max_length=20,
     )
     metadata: Dict[str, Any] = Field(
         ...,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class CreateAssistantRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     model: str = Field(
         ...,
-        description='ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n',
+        description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
     )
     name: Optional[constr(max_length=256)] = Field(
         None,
-        description='The name of the assistant. The maximum length is 256 characters.\n',
+        description="The name of the assistant. The maximum length is 256 characters.\n",
     )
     description: Optional[constr(max_length=512)] = Field(
         None,
-        description='The description of the assistant. The maximum length is 512 characters.\n',
+        description="The description of the assistant. The maximum length is 512 characters.\n",
     )
     instructions: Optional[constr(max_length=32768)] = Field(
         None,
-        description='The system instructions that the assistant uses. The maximum length is 32768 characters.\n',
+        description="The system instructions that the assistant uses. The maximum length is 32768 characters.\n",
     )
     tools: Optional[
         List[Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]]
     ] = Field(
         [],
-        description='A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n',
+        description="A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n",
         max_length=128,
     )
     file_ids: Optional[List[str]] = Field(
         [],
-        description='A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order.\n',
+        description="A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order.\n",
         max_length=20,
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ModifyAssistantRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     model: Optional[str] = Field(
         None,
-        description='ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n',
+        description="ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.\n",
     )
     name: Optional[constr(max_length=256)] = Field(
         None,
-        description='The name of the assistant. The maximum length is 256 characters.\n',
+        description="The name of the assistant. The maximum length is 256 characters.\n",
     )
     description: Optional[constr(max_length=512)] = Field(
         None,
-        description='The description of the assistant. The maximum length is 512 characters.\n',
+        description="The description of the assistant. The maximum length is 512 characters.\n",
     )
     instructions: Optional[constr(max_length=32768)] = Field(
         None,
-        description='The system instructions that the assistant uses. The maximum length is 32768 characters.\n',
+        description="The system instructions that the assistant uses. The maximum length is 32768 characters.\n",
     )
     tools: Optional[
         List[Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]]
     ] = Field(
         [],
-        description='A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n',
+        description="A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant. Tools can be of types `code_interpreter`, `retrieval`, or `function`.\n",
         max_length=128,
     )
     file_ids: Optional[List[str]] = Field(
         [],
-        description='A list of [File](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order. If a file was previosuly attached to the list but does not show up in the list, it will be deleted from the assistant.\n',
+        description="A list of [File](/docs/api-reference/files) IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant. Files are ordered by their creation date in ascending order. If a file was previosuly attached to the list but does not show up in the list, it will be deleted from the assistant.\n",
         max_length=20,
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ListAssistantsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[AssistantObject]
-    first_id: str = Field(..., examples=['asst_abc123'])
-    last_id: str = Field(..., examples=['asst_abc456'])
+    first_id: str = Field(..., examples=["asst_abc123"])
+    last_id: str = Field(..., examples=["asst_abc456"])
     has_more: bool = Field(..., examples=[False])
 
 
@@ -3254,10 +3257,10 @@ class SubmitToolOutputs(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     tool_calls: List[RunToolCallObject] = Field(
-        ..., description='A list of the relevant tool calls.'
+        ..., description="A list of the relevant tool calls."
     )
 
 
@@ -3267,13 +3270,13 @@ class RequiredAction(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     type: Type10 = Field(
-        ..., description='For now, this is always `submit_tool_outputs`.'
+        ..., description="For now, this is always `submit_tool_outputs`."
     )
     submit_tool_outputs: SubmitToolOutputs = Field(
-        ..., description='Details on the tool outputs needed for this run to continue.'
+        ..., description="Details on the tool outputs needed for this run to continue."
     )
 
 
@@ -3283,109 +3286,109 @@ class RunObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object22 = Field(
-        ..., description='The object type, which is always `thread.run`.'
+        ..., description="The object type, which is always `thread.run`."
     )
     created_at: int = Field(
-        ..., description='The Unix timestamp (in seconds) for when the run was created.'
+        ..., description="The Unix timestamp (in seconds) for when the run was created."
     )
     thread_id: str = Field(
         ...,
-        description='The ID of the [thread](/docs/api-reference/threads) that was executed on as a part of this run.',
+        description="The ID of the [thread](/docs/api-reference/threads) that was executed on as a part of this run.",
     )
     assistant_id: str = Field(
         ...,
-        description='The ID of the [assistant](/docs/api-reference/assistants) used for execution of this run.',
+        description="The ID of the [assistant](/docs/api-reference/assistants) used for execution of this run.",
     )
     status: Status2 = Field(
         ...,
-        description='The status of the run, which can be either `queued`, `in_progress`, `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`, or `expired`.',
+        description="The status of the run, which can be either `queued`, `in_progress`, `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`, or `expired`.",
     )
     required_action: RequiredAction = Field(
         ...,
-        description='Details on the action required to continue the run. Will be `null` if no action is required.',
+        description="Details on the action required to continue the run. Will be `null` if no action is required.",
     )
     last_error: LastError = Field(
         ...,
-        description='The last error associated with this run. Will be `null` if there are no errors.',
+        description="The last error associated with this run. Will be `null` if there are no errors.",
     )
     expires_at: int = Field(
-        ..., description='The Unix timestamp (in seconds) for when the run will expire.'
+        ..., description="The Unix timestamp (in seconds) for when the run will expire."
     )
     started_at: int = Field(
-        ..., description='The Unix timestamp (in seconds) for when the run was started.'
+        ..., description="The Unix timestamp (in seconds) for when the run was started."
     )
     cancelled_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run was cancelled.',
+        description="The Unix timestamp (in seconds) for when the run was cancelled.",
     )
     failed_at: int = Field(
-        ..., description='The Unix timestamp (in seconds) for when the run failed.'
+        ..., description="The Unix timestamp (in seconds) for when the run failed."
     )
     completed_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run was completed.',
+        description="The Unix timestamp (in seconds) for when the run was completed.",
     )
     model: str = Field(
         ...,
-        description='The model that the [assistant](/docs/api-reference/assistants) used for this run.',
+        description="The model that the [assistant](/docs/api-reference/assistants) used for this run.",
     )
     instructions: str = Field(
         ...,
-        description='The instructions that the [assistant](/docs/api-reference/assistants) used for this run.',
+        description="The instructions that the [assistant](/docs/api-reference/assistants) used for this run.",
     )
     tools: List[
         Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]
     ] = Field(
         ...,
-        description='The list of tools that the [assistant](/docs/api-reference/assistants) used for this run.',
+        description="The list of tools that the [assistant](/docs/api-reference/assistants) used for this run.",
         max_length=20,
     )
     file_ids: List[str] = Field(
         ...,
-        description='The list of [File](/docs/api-reference/files) IDs the [assistant](/docs/api-reference/assistants) used for this run.',
+        description="The list of [File](/docs/api-reference/files) IDs the [assistant](/docs/api-reference/assistants) used for this run.",
     )
     metadata: Dict[str, Any] = Field(
         ...,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ListRunsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[RunObject]
-    first_id: str = Field(..., examples=['run_abc123'])
-    last_id: str = Field(..., examples=['run_abc456'])
+    first_id: str = Field(..., examples=["run_abc123"])
+    last_id: str = Field(..., examples=["run_abc456"])
     has_more: bool = Field(..., examples=[False])
 
 
 class CreateThreadRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     messages: Optional[List[CreateMessageRequest]] = Field(
         None,
-        description='A list of [messages](/docs/api-reference/messages) to start the thread with.',
+        description="A list of [messages](/docs/api-reference/messages) to start the thread with.",
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class Text(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    value: str = Field(..., description='The data that makes up the text.')
+    value: str = Field(..., description="The data that makes up the text.")
     annotations: List[
         Union[
             MessageContentTextAnnotationsFileCitationObject,
@@ -3400,9 +3403,9 @@ class MessageContentTextObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type13 = Field(..., description='Always `text`.')
+    type: Type13 = Field(..., description="Always `text`.")
     text: Text
 
 
@@ -3412,9 +3415,9 @@ class CodeInterpreter(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    input: str = Field(..., description='The input to the Code Interpreter tool call.')
+    input: str = Field(..., description="The input to the Code Interpreter tool call.")
     outputs: List[
         Union[
             RunStepDetailsToolCallsCodeOutputLogsObject,
@@ -3422,7 +3425,7 @@ class CodeInterpreter(BaseModel):
         ]
     ] = Field(
         ...,
-        description='The outputs from the Code Interpreter tool call. Code Interpreter can output one or more items, including text (`logs`) or images (`image`). Each of these are represented by a different object type.',
+        description="The outputs from the Code Interpreter tool call. Code Interpreter can output one or more items, including text (`logs`) or images (`image`). Each of these are represented by a different object type.",
     )
 
 
@@ -3432,42 +3435,42 @@ class RunStepDetailsToolCallsCodeObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    id: str = Field(..., description='The ID of the tool call.')
+    id: str = Field(..., description="The ID of the tool call.")
     type: Type19 = Field(
         ...,
-        description='The type of tool call. This is always going to be `code_interpreter` for this type of tool call.',
+        description="The type of tool call. This is always going to be `code_interpreter` for this type of tool call.",
     )
     code_interpreter: CodeInterpreter = Field(
-        ..., description='The Code Interpreter tool call definition.'
+        ..., description="The Code Interpreter tool call definition."
     )
 
 
 class ChatCompletionRequestAssistantMessage(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     content: SecretStr = Field(
-        ..., description='The contents of the assistant message.\n'
+        ..., description="The contents of the assistant message.\n"
     )
     role: Role2 = Field(
-        ..., description='The role of the messages author, in this case `assistant`.'
+        ..., description="The role of the messages author, in this case `assistant`."
     )
     name: Optional[str] = Field(
         None,
-        description='An optional name for the participant. Provides the model information to differentiate between participants of the same role.',
+        description="An optional name for the participant. Provides the model information to differentiate between participants of the same role.",
     )
     tool_calls: Optional[ChatCompletionMessageToolCalls] = None
     function_call: Optional[FunctionCall] = Field(
         None,
-        description='Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.',
+        description="Deprecated and replaced by `tool_calls`. The name and arguments of a function that should be called, as generated by the model.",
     )
 
 
 class ListFineTunesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     data: List[FineTune]
     object: Object9
@@ -3475,33 +3478,33 @@ class ListFineTunesResponse(BaseModel):
 
 class CreateThreadAndRunRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     assistant_id: str = Field(
         ...,
-        description='The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.',
+        description="The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.",
     )
     thread: Optional[CreateThreadRequest] = Field(
-        None, description='If no thread is provided, an empty thread will be created.'
+        None, description="If no thread is provided, an empty thread will be created."
     )
     model: Optional[str] = Field(
         None,
-        description='The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.',
+        description="The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.",
     )
     instructions: Optional[str] = Field(
         None,
-        description='Override the default system message of the assistant. This is useful for modifying the behavior on a per-run basis.',
+        description="Override the default system message of the assistant. This is useful for modifying the behavior on a per-run basis.",
     )
     tools: Optional[
         List[Union[AssistantToolsCode, AssistantToolsRetrieval, AssistantToolsFunction]]
     ] = Field(
         None,
-        description='Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.',
+        description="Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.",
         max_length=20,
     )
     metadata: Optional[Dict[str, Any]] = Field(
         None,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
@@ -3511,58 +3514,58 @@ class MessageObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
-        ..., description='The identifier, which can be referenced in API endpoints.'
+        ..., description="The identifier, which can be referenced in API endpoints."
     )
     object: Object25 = Field(
-        ..., description='The object type, which is always `thread.message`.'
+        ..., description="The object type, which is always `thread.message`."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the message was created.',
+        description="The Unix timestamp (in seconds) for when the message was created.",
     )
     thread_id: str = Field(
         ...,
-        description='The [thread](/docs/api-reference/threads) ID that this message belongs to.',
+        description="The [thread](/docs/api-reference/threads) ID that this message belongs to.",
     )
     role: Role7 = Field(
         ...,
-        description='The entity that produced the message. One of `user` or `assistant`.',
+        description="The entity that produced the message. One of `user` or `assistant`.",
     )
     content: List[
         Union[MessageContentImageFileObject, MessageContentTextObject]
     ] = Field(
-        ..., description='The content of the message in array of text and/or images.'
+        ..., description="The content of the message in array of text and/or images."
     )
     assistant_id: str = Field(
         ...,
-        description='If applicable, the ID of the [assistant](/docs/api-reference/assistants) that authored this message.',
+        description="If applicable, the ID of the [assistant](/docs/api-reference/assistants) that authored this message.",
     )
     run_id: str = Field(
         ...,
-        description='If applicable, the ID of the [run](/docs/api-reference/runs) associated with the authoring of this message.',
+        description="If applicable, the ID of the [run](/docs/api-reference/runs) associated with the authoring of this message.",
     )
     file_ids: List[str] = Field(
         ...,
-        description='A list of [file](/docs/api-reference/files) IDs that the assistant should use. Useful for tools like retrieval and code_interpreter that can access files. A maximum of 10 files can be attached to a message.',
+        description="A list of [file](/docs/api-reference/files) IDs that the assistant should use. Useful for tools like retrieval and code_interpreter that can access files. A maximum of 10 files can be attached to a message.",
         max_length=10,
     )
     metadata: Dict[str, Any] = Field(
         ...,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ListMessagesResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[MessageObject]
-    first_id: str = Field(..., examples=['msg_abc123'])
-    last_id: str = Field(..., examples=['msg_abc123'])
+    first_id: str = Field(..., examples=["msg_abc123"])
+    last_id: str = Field(..., examples=["msg_abc123"])
     has_more: bool = Field(..., examples=[False])
 
 
@@ -3572,9 +3575,9 @@ class RunStepDetailsToolCallsObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    type: Type18 = Field(..., description='Always `tool_calls`.')
+    type: Type18 = Field(..., description="Always `tool_calls`.")
     tool_calls: List[
         Union[
             RunStepDetailsToolCallsCodeObject,
@@ -3583,7 +3586,7 @@ class RunStepDetailsToolCallsObject(BaseModel):
         ]
     ] = Field(
         ...,
-        description='An array of tool calls the run step was involved in. These can be associated with one of three types of tools: `code_interpreter`, `retrieval`, or `function`.\n',
+        description="An array of tool calls the run step was involved in. These can be associated with one of three types of tools: `code_interpreter`, `retrieval`, or `function`.\n",
     )
 
 
@@ -3609,17 +3612,17 @@ class ChatCompletionRequestMessage(
 
 class CreateChatCompletionRequest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     messages: List[ChatCompletionRequestMessage] = Field(
         ...,
-        description='A list of messages comprising the conversation so far. [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).',
+        description="A list of messages comprising the conversation so far. [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).",
         min_length=1,
     )
     model: Union[str, Model2] = Field(
         ...,
-        description='ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility) table for details on which models work with the Chat API.',
-        examples=['gpt-3.5-turbo'],
+        description="ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility) table for details on which models work with the Chat API.",
+        examples=["gpt-3.5-turbo"],
     )
     frequency_penalty: Optional[confloat(ge=-2.0, le=2.0)] = Field(
         0,
@@ -3627,15 +3630,15 @@ class CreateChatCompletionRequest(BaseModel):
     )
     logit_bias: Optional[Dict[str, int]] = Field(
         None,
-        description='Modify the likelihood of specified tokens appearing in the completion.\n\nAccepts a JSON object that maps tokens (specified by their token ID in the tokenizer) to an associated bias value from -100 to 100. Mathematically, the bias is added to the logits generated by the model prior to sampling. The exact effect will vary per model, but values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.\n',
+        description="Modify the likelihood of specified tokens appearing in the completion.\n\nAccepts a JSON object that maps tokens (specified by their token ID in the tokenizer) to an associated bias value from -100 to 100. Mathematically, the bias is added to the logits generated by the model prior to sampling. The exact effect will vary per model, but values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.\n",
     )
     max_tokens: Optional[int] = Field(
-        'inf',
+        "inf",
         description="The maximum number of [tokens](/tokenizer) to generate in the chat completion.\n\nThe total length of input tokens and generated tokens is limited by the model's context length. [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken) for counting tokens.\n",
     )
     n: Optional[conint(ge=1, le=128)] = Field(
         1,
-        description='How many chat completion choices to generate for each input message. Note that you will be charged based on the number of generated tokens across all of the choices. Keep `n` as `1` to minimize costs.',
+        description="How many chat completion choices to generate for each input message. Note that you will be charged based on the number of generated tokens across all of the choices. Keep `n` as `1` to minimize costs.",
         examples=[1],
     )
     presence_penalty: Optional[confloat(ge=-2.0, le=2.0)] = Field(
@@ -3648,35 +3651,35 @@ class CreateChatCompletionRequest(BaseModel):
     )
     seed: Optional[conint(ge=-9223372036854776000, le=9223372036854776000)] = Field(
         None,
-        description='This feature is in Beta. \nIf specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result.\nDeterminism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.\n',
+        description="This feature is in Beta. \nIf specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result.\nDeterminism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.\n",
     )
     stop: Optional[Union[str, List[str]]] = Field(
         None,
-        description='Up to 4 sequences where the API will stop generating further tokens.\n',
+        description="Up to 4 sequences where the API will stop generating further tokens.\n",
     )
     stream: Optional[bool] = Field(
         False,
-        description='If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available, with the stream terminated by a `data: [DONE]` message. [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).\n',
+        description="If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available, with the stream terminated by a `data: [DONE]` message. [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).\n",
     )
     temperature: Optional[confloat(ge=0.0, le=2.0)] = Field(
         1,
-        description='What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n',
+        description="What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.\n\nWe generally recommend altering this or `top_p` but not both.\n",
         examples=[1],
     )
     top_p: Optional[confloat(ge=0.0, le=1.0)] = Field(
         1,
-        description='An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n',
+        description="An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.\n\nWe generally recommend altering this or `temperature` but not both.\n",
         examples=[1],
     )
     tools: Optional[List[ChatCompletionTool]] = Field(
         None,
-        description='A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for.\n',
+        description="A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for.\n",
     )
     tool_choice: Optional[ChatCompletionToolChoiceOption] = None
     user: Optional[str] = Field(
         None,
-        description='A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n',
-        examples=['user-1234'],
+        description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).\n",
+        examples=["user-1234"],
     )
     function_call: Optional[
         Union[FunctionCall3, ChatCompletionFunctionCallOption]
@@ -3686,7 +3689,7 @@ class CreateChatCompletionRequest(BaseModel):
     )
     functions: Optional[List[ChatCompletionFunctions]] = Field(
         None,
-        description='Deprecated in favor of `tools`.\n\nA list of functions the model may generate JSON inputs for.\n',
+        description="Deprecated in favor of `tools`.\n\nA list of functions the model may generate JSON inputs for.\n",
         max_length=128,
         min_length=1,
     )
@@ -3699,73 +3702,73 @@ class RunStepObject(BaseModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     id: str = Field(
         ...,
-        description='The identifier of the run step, which can be referenced in API endpoints.',
+        description="The identifier of the run step, which can be referenced in API endpoints.",
     )
     object: Object27 = Field(
-        ..., description='The object type, which is always `thread.run.step``.'
+        ..., description="The object type, which is always `thread.run.step``."
     )
     created_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run step was created.',
+        description="The Unix timestamp (in seconds) for when the run step was created.",
     )
     assistant_id: str = Field(
         ...,
-        description='The ID of the [assistant](/docs/api-reference/assistants) associated with the run step.',
+        description="The ID of the [assistant](/docs/api-reference/assistants) associated with the run step.",
     )
     thread_id: str = Field(
         ...,
-        description='The ID of the [thread](/docs/api-reference/threads) that was run.',
+        description="The ID of the [thread](/docs/api-reference/threads) that was run.",
     )
     run_id: str = Field(
         ...,
-        description='The ID of the [run](/docs/api-reference/runs) that this run step is a part of.',
+        description="The ID of the [run](/docs/api-reference/runs) that this run step is a part of.",
     )
     type: Type16 = Field(
         ...,
-        description='The type of run step, which can be either `message_creation` or `tool_calls`.',
+        description="The type of run step, which can be either `message_creation` or `tool_calls`.",
     )
     status: Status3 = Field(
         ...,
-        description='The status of the run step, which can be either `in_progress`, `cancelled`, `failed`, `completed`, or `expired`.',
+        description="The status of the run step, which can be either `in_progress`, `cancelled`, `failed`, `completed`, or `expired`.",
     )
     step_details: Union[
         RunStepDetailsMessageCreationObject, RunStepDetailsToolCallsObject
-    ] = Field(..., description='The details of the run step.')
+    ] = Field(..., description="The details of the run step.")
     last_error: LastError1 = Field(
         ...,
-        description='The last error associated with this run step. Will be `null` if there are no errors.',
+        description="The last error associated with this run step. Will be `null` if there are no errors.",
     )
     expired_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run step expired. A step is considered expired if the parent run is expired.',
+        description="The Unix timestamp (in seconds) for when the run step expired. A step is considered expired if the parent run is expired.",
     )
     cancelled_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run step was cancelled.',
+        description="The Unix timestamp (in seconds) for when the run step was cancelled.",
     )
     failed_at: int = Field(
-        ..., description='The Unix timestamp (in seconds) for when the run step failed.'
+        ..., description="The Unix timestamp (in seconds) for when the run step failed."
     )
     completed_at: int = Field(
         ...,
-        description='The Unix timestamp (in seconds) for when the run step completed.',
+        description="The Unix timestamp (in seconds) for when the run step completed.",
     )
     metadata: Dict[str, Any] = Field(
         ...,
-        description='Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n',
+        description="Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.\n",
     )
 
 
 class ListRunStepsResponse(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    object: str = Field(..., examples=['list'])
+    object: str = Field(..., examples=["list"])
     data: List[RunStepObject]
-    first_id: str = Field(..., examples=['step_abc123'])
-    last_id: str = Field(..., examples=['step_abc456'])
+    first_id: str = Field(..., examples=["step_abc123"])
+    last_id: str = Field(..., examples=["step_abc456"])
     has_more: bool = Field(..., examples=[False])
