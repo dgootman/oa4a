@@ -1,6 +1,5 @@
 """OA4A Server"""
 
-import json
 import textwrap
 import uuid
 from datetime import datetime
@@ -25,7 +24,7 @@ from .model import (
 app = FastAPI(openapi_url="/v1/openapi.json")
 
 
-@app.get("/v1/models")
+@app.get("/v1/models", response_model_exclude_unset=True)
 def models() -> ListModelsResponse:
     """
     Lists the currently available models,
@@ -44,7 +43,7 @@ def models() -> ListModelsResponse:
     )
 
 
-@app.post("/v1/chat/completions")
+@app.post("/v1/chat/completions", response_model_exclude_unset=True)
 def create_chat_completion(
     request: CreateChatCompletionRequest,
 ) -> CreateChatCompletionResponse | CreateChatCompletionStreamResponse:
@@ -66,8 +65,10 @@ def create_chat_completion(
     if request.stream:
 
         def stream_response():
+            response_id = f"chatcmpl-{str(uuid.uuid4()).replace('-', '')}"
+
             response = CreateChatCompletionStreamResponse(
-                id=str(uuid.uuid4()),
+                id=response_id,
                 choices=[
                     Choice3(
                         delta=ChatCompletionStreamResponseDelta(
@@ -84,8 +85,23 @@ def create_chat_completion(
                 object="chat.completion.chunk",
             )
 
-            yield response.model_dump_json()
-            yield json.dumps({"choices": [{"delta": {}, "finish_reason": "stop"}]})
+            yield response.model_dump_json(exclude_unset=True)
+
+            yield CreateChatCompletionStreamResponse(
+                id=response_id,
+                choices=[
+                    Choice3(
+                        delta=ChatCompletionStreamResponseDelta.model_validate({}),
+                        finish_reason="stop",
+                        index=0,
+                    )
+                ],
+                created=int(datetime.now().timestamp()),
+                model=request.model,
+                system_fingerprint=None,
+                object="chat.completion.chunk",
+            ).model_dump_json(exclude_unset=True)
+
             yield "[DONE]"
 
         return EventSourceResponse(stream_response())
