@@ -1,11 +1,14 @@
 """OA4A Server"""
 
+import inspect
+import logging
 import textwrap
 import uuid
 from datetime import datetime
 
 from fastapi import FastAPI
-from pydantic import SecretStr
+from loguru import logger
+from pydantic import BaseModel, SecretStr
 from sse_starlette import EventSourceResponse
 
 from .model import (
@@ -21,6 +24,34 @@ from .model import (
     Model,
 )
 
+
+class InterceptHandler(logging.Handler):
+    """
+    Loguru interceptor for standard logging
+
+    See https://github.com/Delgan/loguru#entirely-compatible-with-standard-logging
+    """
+
+    def emit(self, record: logging.LogRecord) -> None:
+        # Get corresponding Loguru level if it exists.
+        level: str | int
+        try:
+            level = logger.level(record.levelname).name
+        except ValueError:
+            level = record.levelno
+
+        # Find caller from where originated the logged message.
+        frame, depth = inspect.currentframe(), 0
+        while frame and (depth == 0 or frame.f_code.co_filename == logging.__file__):
+            frame = frame.f_back
+            depth += 1
+
+        logger.opt(depth=depth, exception=record.exc_info).log(
+            level, record.getMessage()
+        )
+
+
+logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 app = FastAPI(openapi_url="/v1/openapi.json")
 
 
@@ -48,6 +79,8 @@ def create_chat_completion(
     request: CreateChatCompletionRequest,
 ) -> CreateChatCompletionResponse | CreateChatCompletionStreamResponse:
     """Creates a model response for the given chat conversation."""
+
+    logger.debug(f"request: {request}")
 
     message = "\n".join(
         [
@@ -85,7 +118,7 @@ def create_chat_completion(
                 object="chat.completion.chunk",
             )
 
-            yield response.model_dump_json(exclude_unset=True)
+            yield response
 
             yield CreateChatCompletionStreamResponse(
                 id=response_id,
@@ -100,11 +133,19 @@ def create_chat_completion(
                 model=request.model,
                 system_fingerprint=None,
                 object="chat.completion.chunk",
-            ).model_dump_json(exclude_unset=True)
+            )
 
             yield "[DONE]"
 
-        return EventSourceResponse(stream_response())
+        def log_response(response_stream):
+            for response in response_stream:
+                if isinstance(response, BaseModel):
+                    logger.debug(f"stream response: {response}")
+                    yield response.model_dump_json(exclude_unset=True)
+                else:
+                    yield response
+
+        return EventSourceResponse(log_response(stream_response()))
     else:
         response = CreateChatCompletionResponse(
             id=str(uuid.uuid4()),
@@ -125,4 +166,5 @@ def create_chat_completion(
             object="chat.completion",
         )
 
+        logger.debug(f"response: {response}")
         return response
