@@ -20,6 +20,9 @@ pylint = {extras = ["spelling"], version = "^3.0.2"}
 black = "^23.11.0"
 isort = "^5.12.0"
 
+[tool.isort]
+profile = "black"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
