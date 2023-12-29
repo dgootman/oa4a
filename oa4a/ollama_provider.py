@@ -52,6 +52,28 @@ class OllamaProvider(Provider):
                 for m in request.messages
             ],
             "stream": request.stream,
+            # Ollama request options are documented at
+            # https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-request-with-options
+            "options": {}
+            | ({"num_keep": request.n} if request.n else {})
+            | ({"seed": request.seed} if request.seed else {})
+            | (
+                {"num_predict": request.max_tokens}
+                if request.max_tokens and request.max_tokens != "inf"
+                else {}
+            )
+            | ({"top_p": request.top_p} if request.top_p else {})
+            | ({"temperature": request.temperature} if request.temperature else {})
+            | (
+                {"frequency_penalty": request.frequency_penalty}
+                if request.frequency_penalty
+                else {}
+            )
+            | (
+                {"presence_penalty": request.presence_penalty}
+                if request.presence_penalty
+                else {}
+            ),
         }
 
         logger.trace(f"ollama request: {json.dumps(ollama_request)}")
