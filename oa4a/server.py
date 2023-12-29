@@ -2,6 +2,7 @@
 
 import inspect
 import logging
+import os
 from datetime import datetime
 
 from fastapi import FastAPI
@@ -19,6 +20,8 @@ from .model import (
     ListModelsResponse,
     Model,
 )
+from .ollama_provider import OllamaProvider
+from .provider import Provider
 
 
 class InterceptHandler(logging.Handler):
@@ -49,7 +52,18 @@ class InterceptHandler(logging.Handler):
 
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 app = FastAPI(openapi_url="/v1/openapi.json")
-provider = MockProvider()
+
+PROVIDERS: dict[str, Provider] = {
+    "mock": MockProvider(),
+    "ollama": OllamaProvider(),
+}
+provider_name = os.environ.get("PROVIDER", None)
+if not provider_name:
+    raise ValueError("No provider specified using environment variable PROVIDER")
+
+provider = PROVIDERS.get(provider_name, None)
+if not provider:
+    raise ValueError(f"Provider '{provider_name}' not found")
 
 
 @app.get("/v1/models", response_model_exclude_unset=True)
