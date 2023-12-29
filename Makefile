@@ -14,20 +14,22 @@ OpenAI Data Models
 Auto-generated from https://github.com/openai/openai-openapi
 """
 
-# isort: skip_file
 # pylint: skip-file
 endef
 export MODEL_HEADER
 
 model: oa4a/model.py
 
+# Generate a Pydantic model for OpenAI
+# Using https://github.com/koxudaxi/datamodel-code-generator
 oa4a/model.py: openai-openapi/openapi.yaml
 	source $$(poetry env info --path)/bin/activate && \
 	cat openai-openapi/openapi.yaml | \
 		yq -Y -f openapi.jq | \
 		datamodel-codegen --input-file-type openapi \
 			--custom-file-header "$${MODEL_HEADER}" \
-			--use-schema-description --disable-timestamp --allow-extra-fields --enum-field-as-literal all \
+			--use-schema-description --use-field-description \
+			--disable-timestamp --allow-extra-fields --enum-field-as-literal all \
 			--output oa4a/model.py --output-model-type pydantic_v2.BaseModel
 
 format:
