@@ -10,6 +10,7 @@ from loguru import logger
 from pydantic import BaseModel
 from sse_starlette import EventSourceResponse
 
+from .amazon_bedrock_provider import AmazonBedrockProvider
 from .mock_provider import MockProvider
 from .model import (
     ChatCompletionStreamResponseDelta,
@@ -53,17 +54,23 @@ class InterceptHandler(logging.Handler):
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 app = FastAPI(openapi_url="/v1/openapi.json")
 
-PROVIDERS: dict[str, Provider] = {
-    "mock": MockProvider(),
-    "ollama": OllamaProvider(),
+PROVIDERS = {
+    "mock": MockProvider,
+    "ollama": OllamaProvider,
+    "bedrock": AmazonBedrockProvider,
 }
+
 provider_name = os.environ.get("PROVIDER", None)
 if not provider_name:
     raise ValueError("No provider specified using environment variable PROVIDER")
 
-provider = PROVIDERS.get(provider_name, None)
-if not provider:
-    raise ValueError(f"Provider '{provider_name}' not found")
+provider_type = PROVIDERS.get(provider_name, None)
+if not provider_type:
+    raise ValueError(f"Provider '{provider_name}' is not supported")
+
+provider: Provider = provider_type()
+
+logger.info(f"Using provider: {provider_name}")
 
 
 @app.get("/v1/models", response_model_exclude_unset=True)
