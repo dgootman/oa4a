@@ -144,4 +144,7 @@ def create_chat_completion(
             else:
                 yield response
 
-    return EventSourceResponse(log_response(stream_response()))
+    return EventSourceResponse(
+        log_response(stream_response()),
+        ping=3600,  # effectively disable ping since it violates the OpenAI API specs
+    )
