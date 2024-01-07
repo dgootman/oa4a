@@ -16,6 +16,9 @@ from .model import (
 class Provider(ABC):
     """AI Provider interface"""
 
+    DEFAULT_MODEL = "gpt-3.5-turbo"
+    START_TIME = datetime.now()
+
     def list_models(self) -> ListModelsResponse:
         """
         Lists the currently available models,
@@ -24,8 +27,8 @@ class Provider(ABC):
         return ListModelsResponse(
             data=[
                 Model(
-                    id="gpt-3.5-turbo",
-                    created=int(datetime.now().timestamp()),
+                    id=Provider.DEFAULT_MODEL,
+                    created=int(Provider.START_TIME.timestamp()),
                     object="model",
                     owned_by="dgootman",
                 )

@@ -45,8 +45,12 @@ class OllamaProvider(Provider):
     ):
         """Creates a model response for the given chat conversation."""
 
+        model = request.model
+        if model == Provider.DEFAULT_MODEL:
+            model = self.ollama_model
+
         ollama_request = {
-            "model": self.ollama_model,
+            "model": model,
             "messages": [
                 {"role": m.root.role, "content": m.root.content.get_secret_value()}
                 for m in request.messages
