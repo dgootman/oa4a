@@ -19,7 +19,6 @@ from .model import (
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
     ListModelsResponse,
-    Model,
 )
 from .ollama_provider import OllamaProvider
 from .provider import Provider
@@ -74,22 +73,14 @@ logger.info(f"Using provider: {provider_name}")
 
 
 @app.get("/v1/models", response_model_exclude_unset=True)
-def models() -> ListModelsResponse:
+def list_models() -> ListModelsResponse:
     """
     Lists the currently available models,
     and provides basic information about each one such as the owner and availability.
     """
-    return ListModelsResponse(
-        data=[
-            Model(
-                id="gpt-3.5-turbo",
-                created=int(datetime.now().timestamp()),
-                object="model",
-                owned_by="dgootman",
-            )
-        ],
-        object="list",
-    )
+    response = provider.list_models()
+    logger.debug(f"response: {response}")
+    return response
 
 
 @app.post("/v1/chat/completions", response_model_exclude_unset=True)
