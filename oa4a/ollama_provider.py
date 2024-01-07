@@ -10,6 +10,8 @@ import requests
 from loguru import logger
 from pydantic import SecretStr
 
+from oa4a.model import ListModelsResponse
+
 from .model import (
     ChatCompletionResponseMessage,
     ChatCompletionStreamResponseDelta,
@@ -18,6 +20,7 @@ from .model import (
     CreateChatCompletionRequest,
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
+    Model,
 )
 from .provider import Provider
 
@@ -34,6 +37,38 @@ class OllamaProvider(Provider):
         self.client = requests.Session()
         self.ollama_url = ollama_url
         self.ollama_model = ollama_model
+
+    def list_models(self) -> ListModelsResponse:
+        """
+        Lists the currently available models,
+        and provides basic information about each one such as the owner and availability.
+        """
+
+        response = self.client.get(
+            f"{self.ollama_url}/api/tags",
+        )
+
+        logger.debug(f"ollama response: {response}")
+        logger.trace(f"ollama response text: {response.text}")
+
+        data = response.json()
+
+        return ListModelsResponse(
+            data=[
+                Model(
+                    id=m["name"].removesuffix(":latest"),
+                    created=int(
+                        datetime.fromisoformat(
+                            m["modified_at"].split(".")[0]
+                        ).timestamp()
+                    ),
+                    object="model",
+                    owned_by="ollama",
+                )
+                for m in data["models"]
+            ],
+            object="list",
+        )
 
     # pylint: disable-next=duplicate-code
     def create_chat_completion(
