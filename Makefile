@@ -22,7 +22,7 @@ model: oa4a/model.py
 
 # Generate a Pydantic model for OpenAI
 # Using https://github.com/koxudaxi/datamodel-code-generator
-oa4a/model.py: openai-openapi/openapi.yaml
+oa4a/model.py: openai-openapi/openapi.yaml openapi.jq
 	source $$(poetry env info --path)/bin/activate && \
 	cat openai-openapi/openapi.yaml | \
 		yq -Y -f openapi.jq | \
