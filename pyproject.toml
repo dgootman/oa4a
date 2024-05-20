@@ -10,11 +10,10 @@ readme = "README.md"
 python = "^3.10"
 boto3 = "^1.34.11"
 boto3-stubs = {extras = ["bedrock-runtime"], version = "^1.34.11"}
-fastapi = "^0.104.1"
+fastapi = "^0.111.0"
 loguru = "^0.7.2"
 requests = "^2.31.0"
-sse-starlette = "^1.8.2"
-uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
+sse-starlette = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 datamodel-code-generator = "^0.25.1"

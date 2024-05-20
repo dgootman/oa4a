@@ -39,5 +39,5 @@ format:
 lint:
 	poetry run pylint oa4a
 
-run:
-	poetry run uvicorn oa4a.server:app --reload
+dev:
+	poetry run fastapi dev oa4a/server.py
