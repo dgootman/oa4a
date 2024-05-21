@@ -2,6 +2,7 @@
 
 import json
 import os
+import random
 import textwrap
 import uuid
 from abc import ABC, abstractmethod
@@ -23,8 +24,12 @@ from .model import (
     CreateChatCompletionRequest,
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
+    CreateImageRequest,
+    Image,
+    ImagesResponse,
 )
 from .provider import Provider
+from .provider_utils import store_image
 
 
 # pylint: disable-next=too-few-public-methods
@@ -174,15 +179,17 @@ class AmazonBedrockProvider(Provider):
 
         engine = AmazonBedrockProvider.ENGINES[model_id]
 
-        body = json.dumps(engine.body(request))
-
-        logger.trace(f"bedrock request: {dict({'body': body, 'modelId': model_id})}")
+        body = engine.body(request)
 
         # pylint: disable=duplicate-code
         # pylint: disable-next=no-else-return
         if request.stream:
+            logger.trace(
+                f"bedrock request: {dict({'body': json.dumps(body), 'modelId': model_id})}"
+            )
+
             response = self.client.invoke_model_with_response_stream(
-                modelId=model_id, body=body
+                modelId=model_id, body=json.dumps(body)
             )
 
             response_id = f"chatcmpl-{str(uuid.uuid4()).replace('-', '')}"
@@ -216,14 +223,7 @@ class AmazonBedrockProvider(Provider):
 
             return stream_response()
         else:
-            accept = "application/json"
-            content_type = "application/json"
-            response = self.client.invoke_model(
-                body=body, modelId=model_id, accept=accept, contentType=content_type
-            )
-            body = response["body"].read().decode()
-            logger.trace(f"bedrock response: {body}")
-            data = json.loads(body)
+            data = self._invoke_model(model_id, body)
             content = engine.parse(data)
 
             response = CreateChatCompletionResponse(
@@ -244,3 +244,66 @@ class AmazonBedrockProvider(Provider):
             )
 
             return response
+
+    def create_image(
+        self,
+        request: CreateImageRequest,
+    ) -> ImagesResponse:
+        """Creates an image given a prompt."""
+
+        # https://docs.aws.amazon.com/bedrock/latest/userguide/api-methods-run-inference.html
+
+        model_id = "amazon.titan-image-generator-v1"
+
+        size = request.size or "256x256"
+        width, height = [int(v) for v in size.split("x")]
+
+        # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html
+        body = {
+            "taskType": "TEXT_IMAGE",
+            "textToImageParams": {"text": request.prompt.get_secret_value()},
+            "imageGenerationConfig": {
+                "numberOfImages": request.n,
+                "quality": ("standard" if request.quality == "standard" else "premium"),
+                "height": height,
+                "width": width,
+                "seed": random.randint(0, 2147483646),
+            },
+        }
+
+        data = self._invoke_model(model_id, body)
+
+        if data.get("error", None):
+            raise RuntimeError(data["error"])
+
+        def to_image(b64_image: str) -> Image:
+            # pylint: disable-next=no-else-return
+            if request.response_format == "b64_json":
+                return Image(b64_json=SecretStr(b64_image))
+            else:
+                return Image(url=store_image(b64_image))
+
+        response = ImagesResponse(
+            data=list(map(to_image, data["images"])),
+            created=int(datetime.now().timestamp()),
+        )
+
+        return response
+
+    def _invoke_model(self, model_id: str, body: dict) -> dict:
+        body_text = json.dumps(body)
+
+        logger.trace(
+            f"bedrock request: {dict({'body': body_text, 'modelId': model_id})}"
+        )
+
+        accept = "application/json"
+        content_type = "application/json"
+        response = self.client.invoke_model(
+            body=body_text, modelId=model_id, accept=accept, contentType=content_type
+        )
+        body_text = response["body"].read().decode()
+
+        logger.trace(f"bedrock response: {body_text}")
+
+        return json.loads(body_text)
