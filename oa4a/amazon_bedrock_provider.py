@@ -27,6 +27,8 @@ from .model import (
     CreateImageRequest,
     Image,
     ImagesResponse,
+    ListModelsResponse,
+    Model,
 )
 from .provider import Provider
 from .provider_utils import store_image
@@ -88,9 +90,11 @@ class AmazonBedrockProvider(Provider):
                 )
 
             prompt = "\n\n".join(
-                m.root.content.get_secret_value()
-                if m.root.role == "assistant"
-                else f"[INST]{m.root.content.get_secret_value()}[/INST]"
+                (
+                    m.root.content.get_secret_value()
+                    if m.root.role == "assistant"
+                    else f"[INST]{m.root.content.get_secret_value()}[/INST]"
+                )
                 for m in messages
             )
 
@@ -164,6 +168,24 @@ class AmazonBedrockProvider(Provider):
         self.client: BedrockRuntimeClient = boto3.client("bedrock-runtime")
         self.bedrock_model = bedrock_model
 
+    def list_models(self) -> ListModelsResponse:
+        """
+        Lists the currently available models,
+        and provides basic information about each one such as the owner and availability.
+        """
+        return ListModelsResponse(
+            data=[
+                Model(
+                    id=id,
+                    created=int(Provider.START_TIME.timestamp()),
+                    object="model",
+                    owned_by="dgootman",
+                )
+                for id in AmazonBedrockProvider.ENGINES
+            ],
+            object="list",
+        )
+
     def create_chat_completion(
         self,
         request: CreateChatCompletionRequest,
@@ -175,7 +197,9 @@ class AmazonBedrockProvider(Provider):
 
         # https://docs.aws.amazon.com/bedrock/latest/userguide/api-methods-run-inference.html
 
-        model_id = self.bedrock_model
+        model_id = request.model
+        if model_id == Provider.DEFAULT_MODEL:
+            model_id = self.bedrock_model
 
         engine = AmazonBedrockProvider.ENGINES[model_id]
 
