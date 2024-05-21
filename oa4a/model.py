@@ -551,8 +551,8 @@ class Choice3(BaseModel):
         extra="allow",
     )
     delta: ChatCompletionStreamResponseDelta
-    finish_reason: Optional[
-        Literal["stop", "length", "tool_calls", "content_filter", "function_call"]
+    finish_reason: Literal[
+        "stop", "length", "tool_calls", "content_filter", "function_call"
     ]
     """
     The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
@@ -676,7 +676,7 @@ class CreateImageRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    prompt: str = Field(..., examples=["A cute baby sea otter"])
+    prompt: SecretStr = Field(..., examples=["A cute baby sea otter"])
     """
     A text description of the desired image(s). The maximum length is 1000 characters for `dall-e-2` and 4000 characters for `dall-e-3`.
     """
@@ -727,7 +727,7 @@ class Image(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    b64_json: Optional[str] = None
+    b64_json: Optional[SecretStr] = None
     """
     The base64-encoded JSON of the generated image, if `response_format` is `b64_json`.
     """
@@ -740,6 +740,10 @@ class Image(BaseModel):
     The prompt that was used to generate the image, if there was any revision to the prompt.
     """
 
+    @field_serializer("b64_json", when_used="json-unless-none")
+    def content_serializer(self, v: SecretStr):
+        return v.get_secret_value()
+
 
 class CreateImageEditRequest(BaseModel):
     model_config = ConfigDict(
@@ -749,7 +753,7 @@ class CreateImageEditRequest(BaseModel):
     """
     The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
     """
-    prompt: str = Field(..., examples=["A cute baby sea otter wearing a beret"])
+    prompt: SecretStr = Field(..., examples=["A cute baby sea otter wearing a beret"])
     """
     A text description of the desired image(s). The maximum length is 1000 characters.
     """
@@ -1316,7 +1320,7 @@ class CreateTranscriptionRequest(BaseModel):
     The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
 
     """
-    prompt: Optional[str] = None
+    prompt: Optional[SecretStr] = None
     """
     An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
 
@@ -1356,7 +1360,7 @@ class CreateTranslationRequest(BaseModel):
     ID of the model to use. Only `whisper-1` is currently available.
 
     """
-    prompt: Optional[str] = None
+    prompt: Optional[SecretStr] = None
     """
     An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should be in English.
 

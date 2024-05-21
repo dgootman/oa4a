@@ -2,7 +2,9 @@
 
 import textwrap
 import uuid
+from base64 import b64encode
 from datetime import datetime
+from pathlib import Path
 from typing import Generator
 
 from pydantic import SecretStr
@@ -16,8 +18,12 @@ from .model import (
     CreateChatCompletionRequest,
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
+    CreateImageRequest,
+    Image,
+    ImagesResponse,
 )
 from .provider import Provider
+from .provider_utils import store_image
 
 
 # pylint: disable-next=too-few-public-methods
@@ -90,3 +96,16 @@ class MockProvider(Provider):
             )
 
             return response
+
+    def create_image(
+        self,
+        request: CreateImageRequest,
+    ) -> ImagesResponse:
+        """Creates an image given a prompt."""
+
+        return ImagesResponse(
+            data=[
+                Image(url=store_image(b64encode(Path("ai.png").read_bytes()).decode()))
+            ],
+            created=int(datetime.now().timestamp()),
+        )

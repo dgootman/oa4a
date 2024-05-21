@@ -8,6 +8,8 @@ from .model import (
     CreateChatCompletionRequest,
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
+    CreateImageRequest,
+    ImagesResponse,
     ListModelsResponse,
     Model,
 )
@@ -45,3 +47,10 @@ class Provider(ABC):
         | Generator[CreateChatCompletionStreamResponse, None, None]
     ):
         """Creates a model response for the given chat conversation."""
+
+    def create_image(
+        self,
+        request: CreateImageRequest,
+    ) -> ImagesResponse:
+        """Creates an image given a prompt."""
+        raise NotImplementedError()

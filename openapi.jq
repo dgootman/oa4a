@@ -10,6 +10,10 @@
                     .
                 end
             )
+        elif .properties.prompt.type == "string" then
+            .properties.prompt.format = "password"
+        elif .properties.b64_json.type == "string" then
+            .properties.b64_json.format = "password"
         else
             .
         end
