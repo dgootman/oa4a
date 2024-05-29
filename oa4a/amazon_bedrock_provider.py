@@ -56,6 +56,70 @@ class AmazonBedrockProvider(Provider):
         def stream_parse(data: dict) -> str:
             """Parse response content from Bedrock response stream"""
 
+    class Claude3Engine(Engine):
+        """Bedrock engine for Claude 3 models"""
+
+        @staticmethod
+        def body(request: CreateChatCompletionRequest) -> dict:
+            """
+            Generate a Claude 3 prompt following the algorithm here:
+            https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
+            """
+            messages = request.messages
+            if messages[0].root.role == "system":
+                system_prompt = messages[0]
+                messages = messages[1:]
+            else:
+                system_prompt = None
+
+            return (
+                {
+                    "anthropic_version": "bedrock-2023-05-31",
+                    "max_tokens": (
+                        request.max_tokens
+                        if request.max_tokens and request.max_tokens != "inf"
+                        else 4096
+                    ),
+                    "messages": [
+                        {
+                            "role": m.root.role,
+                            "content": m.root.content.get_secret_value(),
+                        }
+                        for m in messages
+                    ],
+                }
+                | ({"system": system_prompt} if system_prompt else {})
+                | ({"temperature": request.temperature} if request.temperature else {})
+                | ({"top_p": request.top_p} if request.top_p else {})
+            )
+
+        @staticmethod
+        def parse(data: dict) -> str:
+            data_type = data["type"]
+            if data_type == "error":
+                raise RuntimeError(data)
+
+            if data_type == "message":
+                return "".join(c["text"] for c in data["content"])
+
+            if "content_block" in data:
+                content = data["content_block"]
+            elif "delta" in data:
+                content = data["delta"]
+            else:
+                return ""
+
+            if "text" not in content:
+                if data_type != "message_delta":
+                    logger.warning(f"Unexpected response without text: {data}")
+                return ""
+
+            return content["text"]
+
+        @staticmethod
+        def stream_parse(data: dict) -> str:
+            return AmazonBedrockProvider.Claude3Engine.parse(data)
+
     class Llama2Engine(Engine):
         """Bedrock engine for Llama2 models"""
 
@@ -157,6 +221,7 @@ class AmazonBedrockProvider(Provider):
             return data["outputText"]
 
     ENGINES: dict[str, Engine] = {
+        "anthropic.claude-3-sonnet-20240229-v1:0": Claude3Engine(),
         "meta.llama2-13b-chat-v1": Llama2Engine(),
         "amazon.titan-text-express-v1": TitanEngine(),
     }
