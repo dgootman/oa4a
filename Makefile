@@ -2,7 +2,7 @@
 
 SHELL := /bin/bash -euo pipefail
 
-build: install model format lint
+build: install model format lint test
 
 install:
 	poetry install
@@ -38,6 +38,9 @@ format:
 
 lint:
 	poetry run pylint oa4a
+
+test:
+	poetry run pytest
 
 dev:
 	poetry run fastapi dev oa4a/server.py
