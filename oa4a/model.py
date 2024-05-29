@@ -79,7 +79,7 @@ class CreateCompletionRequest(BaseModel):
     ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.
 
     """
-    prompt: Union[str, List[str], List[int], List[PromptItem]]
+    prompt: Union[SecretStr, List[SecretStr], List[int], List[PromptItem]]
     """
     The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.
 
@@ -208,8 +208,12 @@ class Choice(BaseModel):
 
     """
     index: int
-    logprobs: Logprobs
-    text: str
+    logprobs: Optional[Logprobs]
+    text: SecretStr
+
+    @field_serializer("text", when_used="json-unless-none")
+    def content_serializer(self, v: SecretStr):
+        return v.get_secret_value()
 
 
 class ImageUrl(BaseModel):
@@ -666,10 +670,14 @@ class Choice4(BaseModel):
     """
     The index of the choice in the list of choices.
     """
-    text: str
+    text: SecretStr
     """
     The edited result.
     """
+
+    @field_serializer("text", when_used="json-unless-none")
+    def content_serializer(self, v: SecretStr):
+        return v.get_secret_value()
 
 
 class CreateImageRequest(BaseModel):

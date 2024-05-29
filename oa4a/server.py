@@ -16,10 +16,14 @@ from .amazon_bedrock_provider import AmazonBedrockProvider
 from .mock_provider import MockProvider
 from .model import (
     ChatCompletionStreamResponseDelta,
+    Choice,
     Choice3,
+    CompletionUsage,
     CreateChatCompletionRequest,
     CreateChatCompletionResponse,
     CreateChatCompletionStreamResponse,
+    CreateCompletionRequest,
+    CreateCompletionResponse,
     CreateImageRequest,
     ImagesResponse,
     ListModelsResponse,
@@ -152,6 +156,55 @@ def create_chat_completion(
     return EventSourceResponse(
         log_response(stream_response()),
         ping=3600,  # effectively disable ping since it violates the OpenAI API specs
+    )
+
+
+@app.post("/v1/completions", response_model_exclude_unset=True)
+def create_completion(
+    request: CreateCompletionRequest,
+) -> CreateCompletionResponse:
+    """
+    Creates a completion for the provided prompt and parameters.
+
+    This is a legacy API (https://stackoverflow.com/a/76194915/1660187),
+    implemented by upconverting the request to a chat completion
+    so providers only have to implement the chat API.
+
+    This is supported primarily for iTerm2's OpenAI integration.
+    """
+
+    logger.debug(f"request: {request}")
+
+    if request.stream:
+        raise ValueError("Streaming is not supported for the completions API")
+
+    response = provider.create_chat_completion(
+        CreateChatCompletionRequest.model_validate(
+            request.model_dump()
+            | {"messages": [{"role": "user", "content": request.prompt}]}
+        )
+    )
+
+    if not isinstance(response, CreateChatCompletionResponse):
+        raise RuntimeError(f"Unexpected response type: {type(response)}")
+
+    logger.debug(f"response: {response}")
+
+    return CreateCompletionResponse(
+        id=response.id,
+        choices=[
+            Choice(
+                text=c.message.content,
+                finish_reason=c.finish_reason,
+                index=c.index,
+                logprobs=None,
+            )
+            for c in response.choices
+        ],
+        model=response.model,
+        created=response.created,
+        object="text_completion",
+        usage=CompletionUsage(completion_tokens=0, prompt_tokens=0, total_tokens=0),
     )
 
 
