@@ -1,8 +1,10 @@
-.PHONY: build install model format lint run
+.PHONY: release build install model format lint test dev
 
 SHELL := /bin/bash -euo pipefail
 
-build: install model format lint test
+release: build test
+
+build: install model format lint
 
 install:
 	poetry install
