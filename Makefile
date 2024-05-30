@@ -42,7 +42,9 @@ lint:
 	poetry run pylint oa4a
 
 test:
-	poetry run pytest
+	poetry run coverage run -m pytest
+	poetry run coverage report -m
+	poetry run coverage html
 
 dev:
 	poetry run fastapi dev oa4a/server.py
