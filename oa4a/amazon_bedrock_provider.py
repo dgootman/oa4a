@@ -67,7 +67,7 @@ class AmazonBedrockProvider(Provider):
             """
             messages = request.messages
             if messages[0].root.role == "system":
-                system_prompt = messages[0]
+                system_prompt = messages[0].root.content.get_secret_value()
                 messages = messages[1:]
             else:
                 system_prompt = None

@@ -12,49 +12,48 @@ from oa4a.model import (
     CreateImageRequest,
 )
 
+chat_completion_test_data = [
+    (model, system, message, reply, stream)
+    for model in AmazonBedrockProvider.ENGINES.keys()
+    for system, message, reply in [
+        (None, "What's 1 + 2?", "3"),
+        ('You are a dog. You can only reply with "woof"', "What's 1 + 2?", "woof"),
+    ]
+    for stream in [True, False]
+]
 
-@pytest.mark.parametrize("model", AmazonBedrockProvider.ENGINES.keys())
-def test_chat_completion(model):
+
+@pytest.mark.parametrize("model,system,message,reply,stream", chat_completion_test_data)
+def test_chat_completion(
+    model: str, system: str, message: str, reply: str, stream: bool
+):
     provider = AmazonBedrockProvider()
     response = provider.create_chat_completion(
         CreateChatCompletionRequest.model_validate(
             {
-                "messages": [{"role": "user", "content": "What's 1 + 2?"}],
+                "messages": ([{"role": "system", "content": system}] if system else [])
+                + [{"role": "user", "content": message}],
                 "model": model,
+                "stream": stream,
             }
         )
     )
 
     logger.debug(f"Response: {response}")
 
-    assert isinstance(response, CreateChatCompletionResponse)
-    assert len(response.choices) == 1
-    assert "3" in response.choices[0].message.content.get_secret_value()
+    if not stream:
+        assert isinstance(response, CreateChatCompletionResponse)
+        assert len(response.choices) == 1
+        text = response.choices[0].message.content.get_secret_value()
+    else:
+        assert isinstance(response, Generator)
+        contents = [r.choices[0].delta.content for r in response]
+        assert all(isinstance(c, SecretStr) for c in contents)
 
+        text = "".join(c.get_secret_value() for c in contents)
+        logger.debug(f"Text: {text}")
 
-@pytest.mark.parametrize("model", AmazonBedrockProvider.ENGINES.keys())
-def test_chat_completion_stream(model):
-    provider = AmazonBedrockProvider()
-    responses = provider.create_chat_completion(
-        CreateChatCompletionRequest.model_validate(
-            {
-                "messages": [{"role": "user", "content": "What's 1 + 2?"}],
-                "model": model,
-                "stream": True,
-            }
-        )
-    )
-
-    logger.debug(f"Responses: {responses}")
-
-    assert isinstance(responses, Generator)
-    contents = [r.choices[0].delta.content for r in responses]
-    assert all(isinstance(c, SecretStr) for c in contents)
-
-    text = "".join(c.get_secret_value() for c in contents)
-    logger.debug(f"Text: {text}")
-
-    assert "3" in text
+    assert reply.lower() in text.lower()
 
 
 def test_create_image():
