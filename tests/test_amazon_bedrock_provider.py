@@ -13,9 +13,27 @@ from oa4a.model import (
     CreateImageRequest,
 )
 
+TEST_MODELS = [
+    "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+    # "us.anthropic.claude-sonnet-4-20250514-v1:0", # Not stable
+    "us.meta.llama4-maverick-17b-instruct-v1:0",
+]
+
+
+def test_list_models():
+    provider = AmazonBedrockProvider()
+    response = provider.list_models()
+
+    logger.debug(f"Response: {response}")
+
+    assert response.data
+    for model in TEST_MODELS:
+        assert any(m.id == model for m in response.data)
+
+
 chat_completion_test_data = [
     (model, system, message, reply, stream)
-    for model in AmazonBedrockProvider.MODELS
+    for model in TEST_MODELS
     for system, message, reply in [
         (None, "What's 1 + 2?", "3"),
         ('You are a dog. You can only reply with "woof"', "What's 1 + 2?", "woof"),

@@ -134,18 +134,19 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "boto3-stubs"
-version = "1.40.49"
-description = "Type annotations for boto3 1.40.49 generated with mypy-boto3-builder 8.11.0"
+version = "1.40.50"
+description = "Type annotations for boto3 1.40.50 generated with mypy-boto3-builder 8.11.0"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3_stubs-1.40.49-py3-none-any.whl", hash = "sha256:a4ffaea20b16b9f15c546a7a4ece8abefe356d5f2dbe5727ecd9af4dd62ff93c"},
-    {file = "boto3_stubs-1.40.49.tar.gz", hash = "sha256:89b6a64593f9d41b80472d6248148c41eec569172e9175312382838ea7f09092"},
+    {file = "boto3_stubs-1.40.50-py3-none-any.whl", hash = "sha256:01b9c67df62f26371a4a7473c616eece988a5305e7f7cb3fbc014d178685ac4e"},
+    {file = "boto3_stubs-1.40.50.tar.gz", hash = "sha256:29828adfcb8629b5e285468eb89610f1fc71f964ad0913de3049a0a9d5de0be1"},
 ]
 
 [package.dependencies]
 botocore-stubs = "*"
+mypy-boto3-bedrock = {version = ">=1.40.0,<1.41.0", optional = true, markers = "extra == \"bedrock\""}
 mypy-boto3-bedrock-runtime = {version = ">=1.40.0,<1.41.0", optional = true, markers = "extra == \"bedrock-runtime\""}
 types-s3transfer = "*"
 typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
@@ -204,7 +205,7 @@ bedrock-data-automation-runtime = ["mypy-boto3-bedrock-data-automation-runtime (
 bedrock-runtime = ["mypy-boto3-bedrock-runtime (>=1.40.0,<1.41.0)"]
 billing = ["mypy-boto3-billing (>=1.40.0,<1.41.0)"]
 billingconductor = ["mypy-boto3-billingconductor (>=1.40.0,<1.41.0)"]
-boto3 = ["boto3 (==1.40.49)"]
+boto3 = ["boto3 (==1.40.50)"]
 braket = ["mypy-boto3-braket (>=1.40.0,<1.41.0)"]
 budgets = ["mypy-boto3-budgets (>=1.40.0,<1.41.0)"]
 ce = ["mypy-boto3-ce (>=1.40.0,<1.41.0)"]
@@ -1302,6 +1303,21 @@ files = [
 ]
 
 [[package]]
+name = "mypy-boto3-bedrock"
+version = "1.40.41"
+description = "Type annotations for boto3 Bedrock 1.40.41 service generated with mypy-boto3-builder 8.11.0"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mypy_boto3_bedrock-1.40.41-py3-none-any.whl", hash = "sha256:135e8bf07b9b2edf4de773e51be27414441885434df014a10eda6d05e4511221"},
+    {file = "mypy_boto3_bedrock-1.40.41.tar.gz", hash = "sha256:746343214bcb28f43b4b591c68051494a4707522a2c8348e3b8064f8c9a62afd"},
+]
+
+[package.dependencies]
+typing-extensions = {version = "*", markers = "python_version < \"3.12\""}
+
+[[package]]
 name = "mypy-boto3-bedrock-runtime"
 version = "1.40.41"
 description = "Type annotations for boto3 BedrockRuntime 1.40.41 service generated with mypy-boto3-builder 8.11.0"
@@ -2365,4 +2381,4 @@ tests = ["build", "coverage", "mypy", "ruff", "wheel"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "fb4b97b259de8332870067604695714b8be7bbab445c594e4775556d8713c14d"
+content-hash = "86e24526663e980427a9eae7e3d18be6d053af67681564d232c4eb381b927d81"

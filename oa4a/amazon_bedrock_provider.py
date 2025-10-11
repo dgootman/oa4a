@@ -9,6 +9,7 @@ from typing import Generator
 
 import boto3
 from loguru import logger
+from mypy_boto3_bedrock.client import BedrockClient
 from mypy_boto3_bedrock_runtime import BedrockRuntimeClient
 from pydantic import SecretStr
 
@@ -34,13 +35,6 @@ from .provider_utils import store_image
 class AmazonBedrockProvider(Provider):
     """Amazon Bedrock Provider"""
 
-    MODELS = [
-        "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
-        # "us.anthropic.claude-sonnet-4-20250514-v1:0", # Not stable
-        "us.meta.llama4-maverick-17b-instruct-v1:0",
-        # "amazon.titan-text-express-v1",               # Doesn't support system prompts
-    ]
-
     def __init__(
         self,
         bedrock_model=os.environ.get(
@@ -51,6 +45,7 @@ class AmazonBedrockProvider(Provider):
         ),
     ) -> None:
         self.client: BedrockRuntimeClient = boto3.client("bedrock-runtime")
+        self.bedrock_client: BedrockClient = boto3.client("bedrock")
         self.bedrock_model = bedrock_model
         self.bedrock_image_model = bedrock_image_model
 
@@ -62,12 +57,22 @@ class AmazonBedrockProvider(Provider):
         return ListModelsResponse(
             data=[
                 Model(
-                    id=id,
+                    id=profile["inferenceProfileId"],
                     created=int(Provider.START_TIME.timestamp()),
                     object="model",
-                    owned_by="dgootman",
+                    owned_by=profile["inferenceProfileId"].split(".")[1].title(),
                 )
-                for id in AmazonBedrockProvider.MODELS
+                for profile in sorted(
+                    [
+                        profile
+                        for page in self.bedrock_client.get_paginator(
+                            "list_inference_profiles"
+                        ).paginate()
+                        for profile in page["inferenceProfileSummaries"]
+                        if profile["status"] == "ACTIVE"
+                    ],
+                    key=lambda p: p["createdAt"],
+                )
             ],
             object="list",
         )
