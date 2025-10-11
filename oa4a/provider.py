@@ -19,6 +19,7 @@ class Provider(ABC):
     """AI Provider interface"""
 
     DEFAULT_MODEL = "gpt-3.5-turbo"
+    DEFAULT_IMAGE_MODEL = "dall-e-2"
     START_TIME = datetime.now()
 
     def list_models(self) -> ListModelsResponse:

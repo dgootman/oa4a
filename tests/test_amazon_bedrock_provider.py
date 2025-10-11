@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import Generator
 
 import pytest
@@ -14,7 +15,7 @@ from oa4a.model import (
 
 chat_completion_test_data = [
     (model, system, message, reply, stream)
-    for model in AmazonBedrockProvider.ENGINES.keys()
+    for model in AmazonBedrockProvider.MODELS
     for system, message, reply in [
         (None, "What's 1 + 2?", "3"),
         ('You are a dog. You can only reply with "woof"', "What's 1 + 2?", "woof"),
@@ -58,6 +59,7 @@ def test_chat_completion(
 
 def test_create_image():
     os.environ["BASE_URL"] = "https://localhost:8000"
+    Path("/tmp/oa4a/images").mkdir(parents=True, exist_ok=True)
 
     provider = AmazonBedrockProvider()
     response = provider.create_image(
